@@ -31,8 +31,8 @@ void sodasProduction(int mlContainer, std::mt19937& gen){
     int totalProdRed = static_cast<int>(totalProd);
 
     printf("The main container with a radius of %.0f meters,\nand a height of %.0f meters, can hold %i \nbottles of %i mL.\n",  radius, 
-                                                                                                                              height, 
-                                                                                                                              totalProdRed, 
-                                                                                                                              mlContainer);
+                                                                                                                                height, 
+                                                                                                                                totalProdRed, 
+                                                                                                                                mlContainer);
 
 }
