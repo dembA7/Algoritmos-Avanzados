@@ -6,7 +6,8 @@
 //          Diego Vega Camacho - A01704492
 //          Ian Padrón Corona  - A01708940
 //
-// Description: 
+// Description: Program that calculates the amount of bottles a
+//              container can fill up based on its volume.
 //
 // =================================================================
 
