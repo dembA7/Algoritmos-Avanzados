@@ -21,6 +21,9 @@
 using namespace std;
 
 int main(){
+
+    std::random_device rd;
+    std::mt19937 gen(rd());
     
     printf("==============================================\n");
     printf("================ Activity 1.1 ================\n");
@@ -44,6 +47,26 @@ int main(){
 
     printf("================ UC4 Shirts ==================\n");
     shirtsProduction(938);
+    printf("==============================================\n");
+    printf("\n");
+
+    printf("================ UC1 Bottles =================\n");
+    sodasProduction(355, gen);
+    printf("==============================================\n");
+    printf("\n");
+
+    printf("================ UC2 Bottles =================\n");
+    sodasProduction(600, gen);
+    printf("==============================================\n");
+    printf("\n");
+
+    printf("================ UC3 Bottles =================\n");
+    sodasProduction(2500, gen);
+    printf("==============================================\n");
+    printf("\n");
+
+    printf("================ UC4 Bottles =================\n");
+    sodasProduction(1250, gen);
     printf("==============================================\n");
     printf("\n");
     

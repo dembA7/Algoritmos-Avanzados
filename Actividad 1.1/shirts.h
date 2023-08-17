@@ -35,9 +35,9 @@ void shirtsProduction(int shirts){
         totalProd += prodDay;
         totalDays++;
 
-        printf("The production of shirts on day %i was: %i\n", totalDays, prodDay);
+        printf("The production of shirts on day %i was: %i.\n", totalDays, prodDay);
     }
     
-    printf("The production was completed in %i days\n", totalDays);
+    printf("The production was completed in %i days.\n", totalDays);
 
 };
