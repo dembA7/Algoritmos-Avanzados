@@ -6,10 +6,7 @@
 //          Diego Vega Camacho - A01704492
 //          Ian Padrón Corona  - A01708940
 //
-// Description: Unit cases for shirts and 
-//
-//
-// To compile: g++ main.cpp -o app
+// Description: Unit cases for shirts and bottles functions.
 //
 // =================================================================
 
