@@ -9,6 +9,6 @@ def TowerOfHanoi(n, from_rod, to_rod, aux_rod):
     return moves
 
 # Driver code
-N = int(input("Enter the number od disks: "))
+N = int(input("Enter the number of disks: "))
 total_moves = TowerOfHanoi(N, 'A', 'C', 'B')
 print("Total movements:", total_moves)
