@@ -1,14 +1,21 @@
-def TowerOfHanoi(n, from_rod, to_rod, aux_rod):
+def TowerOfHanoi(n, from_rod, to_rod, aux_rod, move_count):
+    
     if n == 0:
-        return 0
-    moves = (
-        TowerOfHanoi(n-1, from_rod, aux_rod, to_rod) +
-        1 +
-        TowerOfHanoi(n-1, aux_rod, to_rod, from_rod)
-    )
-    return moves
+        return
+    
+    TowerOfHanoi(n-1, from_rod, aux_rod, to_rod, move_count)
+
+    move_count[0] += 1
+    
+    print("Move disk", n, "from rod", from_rod, "to rod", to_rod)
+    
+    TowerOfHanoi(n-1, aux_rod, to_rod, from_rod, move_count)
 
 # Driver code
 N = int(input("Enter the number of disks: "))
-total_moves = TowerOfHanoi(N, 'A', 'C', 'B')
-print("Total movements:", total_moves)
+
+move_count = [0]  # Counter to store the number of movements
+
+TowerOfHanoi(N, 'A', 'C', 'B', move_count)
+
+print("Total movements:", move_count[0])
