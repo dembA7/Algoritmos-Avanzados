@@ -72,7 +72,7 @@ vector<int> cambioDinamico(int costoProducto, int pagoEfectivo, const vector<int
 }
 
 // ==========================================================================================
-// Función que resuelve el problema del cambio de monedas usando algortimos voraces.
+// Función que resuelve el problema del cambio de monedas usando algoritmos voraces.
 //
 // @param costoProducto, entero que contiene el costo del producto.
 // @param pagoEfectivo, entero que contiene la cantidad con la que se paga el producto.
