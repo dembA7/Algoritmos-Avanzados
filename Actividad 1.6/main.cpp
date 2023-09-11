@@ -113,11 +113,13 @@ int main() {
     }
 
     if (solveMazeBacktracking(0, 0, M, N, maze, solutionBacktracking)) {
-        cout << "Backtracking Solution:\n";
+        cout << "\nBacktracking Solution:\n";
         printMaze(solutionBacktracking);
     } else {
         cout << "No hay solución para backtracking." << endl;
     }
+
+    cout << " " << endl;
 
     return 0;
 }
