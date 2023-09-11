@@ -16,9 +16,35 @@
 
 using namespace std;
 
+// ==========================================================================================
+// Función que determina si un valor es válido para la solucion de ramificacion y poda.
+//
+// @param x, coordenada en el eje x.
+// @param y, coordenada en el eje y.
+// @param maze, matriz que representa el laberinto con obstáculos.
+// @param solution, matriz que representa la solución parcial actual del laberinto.
+//
+// @complexity O(1)
+// ==========================================================================================
+
 bool isValidPoda(int x, int y, const vector<vector<int>> &maze, const vector<vector<int>> &solution) {
     return x >= 0 && x < maze.size() && y >= 0 && y < maze[0].size() && maze[x][y] == 1 && solution[x][y] == 0;
 }
+
+
+
+// ==========================================================================================
+// Función que resuelve el laberinto utilizando ramificación y poda.
+//
+// @param x, coordenada en el eje x.
+// @param y, coordenada en el eje y.
+// @param maze, matriz que representa el laberinto con obstáculos.
+// @param solution, matriz que representa la solución parcial actual del laberinto.
+//
+// @return true si se encuentra una solución al laberinto.
+//
+// @complexity O(N)
+// ==========================================================================================
 
 bool solveMazePoda(int x, int y, vector<vector<int>> &maze, vector<vector<int>> &solution) {
     if (x == maze.size() - 1 && y == maze[0].size() - 1) {
@@ -40,12 +66,44 @@ bool solveMazePoda(int x, int y, vector<vector<int>> &maze, vector<vector<int>> 
     return false;
 }
 
+
+
+// ==========================================================================================
+// Función que determina si un valor es válido para la solucion de backtracking.
+//
+// @param x, coordenada en el eje x.
+// @param y, coordenada en el eje y.
+// @param M, número de filas del laberinto.
+// @param N, número de columnas del laberinto.
+// @param maze, matriz que representa el laberinto con obstáculos.
+// @param solutionBacktracking, matriz que representa la solución parcial actual del laberinto.
+//
+// @return true si (x, y) es una posicion válida para avanzar.
+//
+// @complexity O(1)
+// ==========================================================================================
+
 bool isValidBacktracking(int x, int y, int M, int N, const vector<vector<int>> &maze, const vector<vector<int>> &solutionBacktracking) {
     if (x >= 0 && x < M && y >= 0 && y < N && maze[x][y] == 1 && solutionBacktracking[x][y] != 1) {
         return true;
     }
     return false;
 }
+
+
+
+// ==========================================================================================
+// Función que a través de backtracking, busca encontrar una solución para un laberinto
+// bidimensional.
+//
+// @param x, coordenada en el eje x.
+// @param y, coordenada en el eje y.
+// @param M, número de filas del laberinto.
+// @param N, número de columnas del laberinto, 
+// @param solutionBacktracking, matriz que representa la solución parcial actual del laberinto.
+//
+// @complexity O(N)
+// ==========================================================================================
 
 bool solveMazeBacktracking(int x, int y, int M, int N, vector<vector<int>> &maze, vector<vector<int>> &solutionBacktracking) {
     if (x == M - 1 && y == N - 1) {
@@ -78,6 +136,16 @@ bool solveMazeBacktracking(int x, int y, int M, int N, vector<vector<int>> &maze
     return false;
 }
 
+
+
+// ==========================================================================================
+// Función que imprime una matriz bidimensional en la consola.
+//
+// @param maze, matriz bidimensional a imprimir.
+//
+// @complexity O(N^2)
+// ==========================================================================================
+
 void printMaze(const vector<vector<int>> &maze) {
     for (const auto &row : maze) {
         for (int cell : row) {
@@ -86,6 +154,14 @@ void printMaze(const vector<vector<int>> &maze) {
         cout << endl;
     }
 }
+
+
+
+// ==========================================================================================
+// Función que resuelve el laberinto aplicando 'backtracking' y 'ramificación y poda'.
+//
+// @complexity O(N^2)
+// ==========================================================================================
 
 int main() {
     int M, N;
