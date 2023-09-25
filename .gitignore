@@ -1,4 +1,8 @@
+# C++ Dependencies
 .vscode
+
+# MacOS
+.DS_Store
 
 # Prerequisites
 *.d
