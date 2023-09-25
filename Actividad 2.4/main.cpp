@@ -16,30 +16,30 @@
 #include <algorithm>
 #include <unordered_set>
 
-void printSubstrings(const std::vector<std::string>& substrings) {
-    for (const std::string& substring : substrings) {
-        std::cout << substring << std::endl;
+using namespace std;
+
+void printSubstrings(const vector<string>& substrings) {
+    for (const string& substring:substrings) {
+        cout << substring << endl;
     }
 }
 
 int main() {
-    std::string inputString;
-    std::cout << "Ingrese un string: ";
-    std::cin >> inputString;
+    string inputString;
+    cout << "Ingrese un string: ";
+    cin >> inputString;
 
-    std::unordered_set<std::string> substrings_set;
-
-    for (size_t i = 0; i < inputString.length(); ++i) {
-        for (size_t j = 1; j <= inputString.length() - i; ++j) {
-            substrings_set.insert(inputString.substr(i, j));
-        }
+    unordered_set<string> substrings_set;
+    int j = inputString.length();
+    for (size_t i = 0; i < inputString.length(); i++) {
+        substrings_set.insert(inputString.substr(i, j));
     }
 
-    std::vector<std::string> substrings(substrings_set.begin(), substrings_set.end());
+    vector<string> substrings(substrings_set.begin(), substrings_set.end());
 
-    std::sort(substrings.begin(), substrings.end());
+    sort(substrings.begin(), substrings.end());
 
-    std::cout << "Substrings ordenados alfabeticamente:" << std::endl;
+    cout << "Substrings ordenados alfabeticamente:" << endl;
     printSubstrings(substrings);
 
     return 0;
