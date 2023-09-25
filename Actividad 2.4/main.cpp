@@ -6,7 +6,7 @@
 //          Diego Vega Camacho - A01704492
 //          Ian Padrón Corona  - A01708940
 //
-// Description: Algoritmo que dado un string, calcule el arreglo de substrings y lo 
+// Description: Algoritmo que dado un string, calcula el arreglo de substrings y lo 
 // muestre ordenado alfabéticamente.
 //
 // ==========================================================================================
@@ -18,11 +18,30 @@
 
 using namespace std;
 
+
+// ==========================================================================================
+// Función printSubstrings, imprime el arreglo de substrings ordenado alfabéticamente.
+// 
+// @params n: Vector de strings que contiene los substrings del string original.
+//
+// @return: Imprime el arreglo de substrings ordenado alfabéticamente.
+// @complexity O(n)
+// ==========================================================================================
+
 void printSubstrings(const vector<string>& substrings) {
     for (const string& substring:substrings) {
         cout << substring << endl;
     }
 }
+
+// ==========================================================================================
+// Funcion main, toma como entrada un string y devuelve el arreglo de substrings ordenado
+// 
+// @params n: String de entrada.
+//
+// @return: 0 si el programa se ejecuta correctamente.
+// @complexity O(n)
+// ==========================================================================================
 
 int main() {
     string inputString;
