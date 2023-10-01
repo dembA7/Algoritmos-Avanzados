@@ -175,7 +175,7 @@ int main() {
 
     // Códigos maliciosos contenidos en las transmisiones
     cout << "\n======================================" << endl;
-    cout << "Búsqueda del código malicioso          " << endl;
+    cout << "Busqueda del codigo malicioso          " << endl;
     cout << "======================================" << endl;
     searchMaliciousCode(transmission1Content, mcode1Content, "transmission1.txt");
     searchMaliciousCode(transmission1Content, mcode2Content, "transmission1.txt");
@@ -186,14 +186,14 @@ int main() {
 
     // Palíndromos en las transmisiones
     cout << "\n======================================" << endl;
-    cout << "Búsqueda de palindromos              " << endl;
+    cout << "Busqueda de palindromos              " << endl;
     cout << "======================================" << endl;
     findLongestPalindrome(transmission1Content, "transmission1.txt");
     findLongestPalindrome(transmission2Content, "transmission2.txt");
 
     // Substring más largo común entre las transmisiones
     cout << "\n======================================" << endl;
-    cout << "Búsqueda de subcadena común más largo      " << endl;
+    cout << "Busqueda de subcadena comun más largo      " << endl;
     cout << "======================================" << endl;
     findLongestCommonSubstring(transmission1Content, transmission2Content, "transmission1.txt");
     cout << "\n" << endl;
