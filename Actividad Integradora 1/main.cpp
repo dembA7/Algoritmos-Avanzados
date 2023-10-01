@@ -193,7 +193,7 @@ int main() {
 
     // Substring más largo común entre las transmisiones
     cout << "\n======================================" << endl;
-    cout << "Busqueda de subcadena comun más largo      " << endl;
+    cout << "Busqueda de subcadena comun mas largo      " << endl;
     cout << "======================================" << endl;
     findLongestCommonSubstring(transmission1Content, transmission2Content, "transmission1.txt");
     cout << "\n" << endl;
