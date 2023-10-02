@@ -79,8 +79,8 @@ void searchMaliciousCode(const string& transmission, const string& maliciousCode
 }
 
 // ==========================================================================================
-// Función searchSubstring
-// 
+// Función searchSubstring, busca una subcadena en una cadena de transmisión y muestra la
+//  posición donde se encuentra
 //
 // @params transmission: Texto de transmisión que se desea analizar
 // @params substring: Subcadena que se desea buscar
