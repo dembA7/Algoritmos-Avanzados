@@ -135,14 +135,12 @@ string findLongestCommonSubstring(const string& transmission1, const string& tra
 
 
 int main() {
-    // Leer el contenido de los archivos
     string mcode1Content = readFromFile("mcode01.txt");
     string mcode2Content = readFromFile("mcode02.txt");
     string mcode3Content = readFromFile("mcode03.txt");
     string transmission1Content = readFromFile("transmission01.txt");
     string transmission2Content = readFromFile("transmission02.txt");
 
-    // Archivos y Contenido
     cout << " " << endl;
     cout << "Archivo de transmission 1" << endl;
     cout << transmission1Content << endl;
