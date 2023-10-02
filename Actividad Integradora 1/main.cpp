@@ -15,6 +15,7 @@
 #include <fstream>
 #include <sstream>
 #include <algorithm>
+#include <vector>
 
 using namespace std;
 
@@ -30,9 +31,21 @@ using namespace std;
 
 string readFromFile(const string& filename) {
     ifstream file(filename);
-    stringstream buffer;
-    buffer << file.rdbuf();
-    return buffer.str();
+    if (!file.is_open()) {
+        cerr << "\nNo se encontro el archivo." << endl;
+        return "";
+    }
+
+    std::string buffer;
+    std::string line;
+
+    while (std::getline(file, line))
+    {
+        buffer += line;
+    }
+
+    file.close();
+    return buffer;
 }
 
 // ==========================================================================================
@@ -63,62 +76,25 @@ bool isPalindrome(const string& text) {
 // @complexity O(n)
 // ==========================================================================================
 
-void searchMaliciousCode(const string& transmission, const string& maliciousCode, const string& transmissionName) {
-    size_t pos = transmission.find(maliciousCode);
+void searchMaliciousCode(const string& transmission, const vector<string>& maliciousCode, const string& transmissionName) {
+    if (transmission == "") {
+        cout << "Archivo transmision no valido" << endl;
+        return;
+    }
 
-    if (pos != string::npos) {
-        cout << "true " << pos / 2 + 1 << " (in " << transmissionName << ")" << endl;
-    } else {
-        cout << "false (in " << transmissionName << ")" << endl;
+    for (const string& maliciousCode : maliciousCode) {
+        size_t pos = transmission.find(maliciousCode);
+
+        if (pos != string::npos) {
+            size_t endPos = pos + maliciousCode.length() - 1;
+            cout << "(true) Codigo Malicioso: '" << maliciousCode << "' Posicion inicial: " << pos << "  Posicion final: " << endPos << " (in " << transmissionName << ")" << endl;
+        } else {
+            cout << "(false) Codigo Malicioso: '" << maliciousCode << "' no encontrado en (" << transmissionName << ")" << endl;
+        }
     }
 }
 
-// ==========================================================================================
-// Función findLongestPalindrome, busca el palíndromo más largo en una cadena y muestra su
-// posición
-// 
-// @params transmission: Texto de transmisión que se desea analizar
-// @params maliciousCode: Código malicioso que se desea buscar
-// @params transmissionName: Nombre del archivo de transmisión que se desea analizar
-//
-// @return: Regresa el palíndromo más largo identificado en los archivos de transmisión
-// @complexity O(n)
-// ==========================================================================================
 
-void findLongestPalindrome(const string& transmission, const string& transmissionName) {
-    int maxLength = 1;  // Longitud mínima de un palíndromo: 1
-    int start = 0;  // Posición inicial del palíndromo
-
-    int len = transmission.length();
-
-    for (int i = 1; i < len; ++i) {
-        // Buscar palíndromos con i como centro
-        int low = i - 1;
-        int high = i;
-        while (low >= 0 && high < len && transmission[low] == transmission[high]) {
-            if (high - low + 1 > maxLength) {
-                maxLength = high - low + 1;
-                start = low;
-            }
-            --low;
-            ++high;
-        }
-
-        // Buscar palíndromos con i-1 e i como centro
-        low = i - 1;
-        high = i + 1;
-        while (low >= 0 && high < len && transmission[low] == transmission[high]) {
-            if (high - low + 1 > maxLength) {
-                maxLength = high - low + 1;
-                start = low;
-            }
-            --low;
-            ++high;
-        }
-    }
-
-    cout << start + 1 << " " << start + maxLength << " (in " << transmissionName << ")" << endl;
-}
 
 // ==========================================================================================
 // Función findLongestCommonSubstring, busca el substring más largo común en dos cadenas 
@@ -134,68 +110,97 @@ void findLongestPalindrome(const string& transmission, const string& transmissio
 // @complexity O(n^2)
 // ==========================================================================================
 
-void findLongestCommonSubstring(const string& str1, const string& str2, const string& transmission1Name) {
-    int len1 = str1.length();
-    int len2 = str2.length();
+string findLongestCommonSubstring(const string& transmission1, const string& transmission2) {
+    int len1 = transmission1.length();
+    int len2 = transmission2.length();
 
+    vector<vector<int>> dp(len1 + 1, vector<int>(len2 + 1, 0));
     int maxLength = 0;
-    int endingIndex = 0;
+    int endIndex = 0;
 
-    // Inicializar una matriz para almacenar la longitud de la subcadena común
-    int lcs[len1 + 1][len2 + 1];
-
-    // Rellenar la matriz y encontrar la longitud de la subcadena común
-    for (int i = 0; i <= len1; ++i) {
-        for (int j = 0; j <= len2; ++j) {
-            if (i == 0 || j == 0)
-                lcs[i][j] = 0;
-            else if (str1[i - 1] == str2[j - 1]) {
-                lcs[i][j] = lcs[i - 1][j - 1] + 1;
-                if (lcs[i][j] > maxLength) {
-                    maxLength = lcs[i][j];
-                    endingIndex = i - 1;
+    for (int i = 1; i <= len1; i++) {
+        for (int j = 1; j <= len2; j++) {
+            if (transmission1[i - 1] == transmission2[j - 1]) {
+                dp[i][j] = dp[i - 1][j - 1] + 1;
+                if (dp[i][j] > maxLength) {
+                    maxLength = dp[i][j];
+                    endIndex = i - 1;
                 }
-            } else
-                lcs[i][j] = 0;
+            }
         }
     }
 
-    int startingIndex = endingIndex - maxLength + 1;
-
-    cout << startingIndex + 1 << " " << endingIndex + 1 << " (in " << transmission1Name << ")" << endl;
+    int startIndex = endIndex - maxLength + 1;
+    if (maxLength > 0) {
+        return transmission1.substr(startIndex, maxLength);
+    } else {
+        return "Archivo tranmision no valido";
+    }
 }
+
 
 int main() {
     // Leer el contenido de los archivos
-    string mcode1Content = readFromFile("mcode1.txt");
-    string mcode2Content = readFromFile("mcode2.txt");
-    string mcode3Content = readFromFile("mcode3.txt");
-    string transmission1Content = readFromFile("transmission1.txt");
-    string transmission2Content = readFromFile("transmission2.txt");
+    string mcode1Content = readFromFile("mcode01.txt");
+    string mcode2Content = readFromFile("mcode02.txt");
+    string mcode3Content = readFromFile("mcode03.txt");
+    string transmission1Content = readFromFile("transmission01.txt");
+    string transmission2Content = readFromFile("transmission02.txt");
 
-    // Códigos maliciosos contenidos en las transmisiones
-    cout << "\n======================================" << endl;
-    cout << "Busqueda del codigo malicioso          " << endl;
-    cout << "======================================" << endl;
-    searchMaliciousCode(transmission1Content, mcode1Content, "transmission1.txt");
-    searchMaliciousCode(transmission1Content, mcode2Content, "transmission1.txt");
-    searchMaliciousCode(transmission1Content, mcode3Content, "transmission1.txt");
-    searchMaliciousCode(transmission2Content, mcode1Content, "transmission2.txt");
-    searchMaliciousCode(transmission2Content, mcode2Content, "transmission2.txt");
-    searchMaliciousCode(transmission2Content, mcode3Content, "transmission2.txt");
+    // Archivos y Contenido
+    cout << " " << endl;
+    cout << "Archivo de transmission 1" << endl;
+    cout << transmission1Content << endl;
+    cout << " " << endl;
 
-    // Palíndromos en las transmisiones
-    cout << "\n======================================" << endl;
-    cout << "Busqueda de palindromos              " << endl;
-    cout << "======================================" << endl;
-    findLongestPalindrome(transmission1Content, "transmission1.txt");
-    findLongestPalindrome(transmission2Content, "transmission2.txt");
+    cout << "Archivo de transmission 2" << endl;
+    cout << transmission2Content << endl;
+    cout << " " << endl;
 
-    // Substring más largo común entre las transmisiones
-    cout << "\n======================================" << endl;
-    cout << "Busqueda de subcadena comun mas largo      " << endl;
-    cout << "======================================" << endl;
-    findLongestCommonSubstring(transmission1Content, transmission2Content, "transmission1.txt");
+    cout << "Archivo de mcode1" << endl;
+    cout << mcode1Content << endl;
+    cout << " " << endl;
+
+    cout << "Archivo de mcode2" << endl;
+    cout << mcode2Content << endl;
+    cout << " " << endl;
+
+    cout << "Archivo de mcode3" << endl;
+    cout << mcode3Content << endl;
+    cout << " " << endl;
+
+    cout << "        T R A N S M I S S I O N  1               " << endl;
+    cout << " " << endl;
+
+    cout << "mcode1: " << endl;
+    searchMaliciousCode(transmission1Content, mcode1Content, "transmission01.txt");
+    cout << " " << endl;
+
+    cout << "mcode2: " << endl;
+    searchMaliciousCode(transmission1Content, mcode2Content, "transmission01.txt");
+    cout << " " << endl;
+    
+    cout << "mcode3: " << endl;
+    searchMaliciousCode(transmission1Content, mcode3Content, "transmission01.txt");
+    cout << " " << endl;
+    
+    cout << "        T R A N S M I S S I O N  2               " << endl;
+    cout << " " << endl;
+    cout << "mcode1: " << endl;
+    searchMaliciousCode(transmission2Content, mcode1Content, "transmission02.txt");
+    cout << " " << endl;
+
+    cout << "mcode2: " << endl;
+    searchMaliciousCode(transmission2Content, mcode2Content, "transmission02.txt");
+    cout << " " << endl;
+    
+    cout << "mcode3: " << endl;
+    searchMaliciousCode(transmission2Content, mcode3Content, "transmission02.txt");
+    cout << " " << endl;
+
+    cout << "        S U B S T R I N G  M A S  L A R G O       " << endl;
+    cout << " " << endl;
+    cout << findLongestCommonSubstring(transmission1Content, transmission2Content);
     cout << "\n" << endl;
     return 0;
 }
