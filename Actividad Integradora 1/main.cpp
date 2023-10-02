@@ -48,20 +48,6 @@ string readFromFile(const string& filename) {
     return buffer;
 }
 
-// ==========================================================================================
-// Función isPalindrome, verifica si un texto es palíndromo o no
-// 
-// @params text: Texto que se desea verificar
-//
-// @return: Regresa el texto al revés
-// @complexity O(n)
-// ==========================================================================================
-
-bool isPalindrome(const string& text) {
-    string reversedText = text;
-    reverse(reversedText.begin(), reversedText.end());
-    return text == reversedText;
-}
 
 // ==========================================================================================
 // Función searchMaliciousCode, busca si una subcadena de código malicioso está contenido 
@@ -91,6 +77,7 @@ void searchMaliciousCode(const string& transmission, const string& maliciousCode
         cout << "Codigo Malicioso: '" << maliciousCode << "' no encontrado en (" << transmissionName << ")" << endl;
     }
 }
+
 
 // ==========================================================================================
 // Función findLongestCommonSubstring, busca el substring más largo común en dos cadenas
