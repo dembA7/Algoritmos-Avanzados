@@ -78,6 +78,32 @@ void searchMaliciousCode(const string& transmission, const string& maliciousCode
     }
 }
 
+// ==========================================================================================
+// Función searchSubstring
+// 
+//
+// @params transmission: Texto de transmisión que se desea analizar
+// @params substring: Subcadena que se desea buscar
+//
+// @return: Retorna los indices donde se encuentra la subcadena en la cadena de transmisión.
+//         
+// @complexity O(n)
+// ==========================================================================================
+
+void searchSubstring(const string &transmission, const string &substring) {
+    size_t startPos = 0;
+    size_t pos = transmission.find(substring, startPos);
+
+    while (pos != string::npos) {
+        size_t endPos = pos + substring.length();
+        cout << "Posicion inicial: " << pos + 1 << "  Posicion final: " << endPos << endl;
+        startPos = pos + 1;
+        pos = transmission.find(substring, startPos);
+    }
+}
+
+
+
 
 // ==========================================================================================
 // Función findLongestCommonSubstring, busca el substring más largo común en dos cadenas
@@ -182,7 +208,16 @@ int main() {
 
     cout << "        S U B S T R I N G  C O M P A R T I D O  M A S  L A R G O       " << endl;
     cout << " " << endl;
-    cout << findLongestCommonSubstring(transmission1Content, transmission2Content);
+    string longestCommonSubstring = findLongestCommonSubstring(transmission1Content, transmission2Content);
+    cout << longestCommonSubstring << endl;
+    cout << " " << endl;
+
+    cout << "Posiciones en la transmission1: " << endl;
+    searchSubstring(transmission1Content, longestCommonSubstring);
+    cout << "\n" << endl;
+
+    cout << "Posiciones en la transmission2: " << endl;
+    searchSubstring(transmission2Content, longestCommonSubstring);
     cout << "\n" << endl;
     return 0;
 }
