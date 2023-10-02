@@ -76,35 +76,30 @@ bool isPalindrome(const string& text) {
 // @complexity O(n)
 // ==========================================================================================
 
-void searchMaliciousCode(const string& transmission, const vector<string>& maliciousCode, const string& transmissionName) {
-    if (transmission == "") {
-        cout << "Archivo transmision no valido" << endl;
-        return;
+void searchMaliciousCode(const string& transmission, const string& maliciousCode, const string& transmissionName) {
+    size_t pos = transmission.find(maliciousCode);
+    size_t startPos = 0;
+
+    while (pos != string::npos) {
+        size_t endPos = pos + maliciousCode.length() - 1;
+        cout << "(true) Posicion inicial: " << pos << "  Posicion final: " << endPos << endl;
+        startPos = pos + maliciousCode.length();
+        pos = transmission.find(maliciousCode, startPos);
     }
 
-    for (const string& maliciousCode : maliciousCode) {
-        size_t pos = transmission.find(maliciousCode);
-
-        if (pos != string::npos) {
-            size_t endPos = pos + maliciousCode.length() - 1;
-            cout << "(true) Codigo Malicioso: '" << maliciousCode << "' Posicion inicial: " << pos << "  Posicion final: " << endPos << " (in " << transmissionName << ")" << endl;
-        } else {
-            cout << "(false) Codigo Malicioso: '" << maliciousCode << "' no encontrado en (" << transmissionName << ")" << endl;
-        }
+    if (startPos == 0) {
+        cout << "Codigo Malicioso: '" << maliciousCode << "' no encontrado en (" << transmissionName << ")" << endl;
     }
 }
 
-
-
 // ==========================================================================================
-// Función findLongestCommonSubstring, busca el substring más largo común en dos cadenas 
+// Función findLongestCommonSubstring, busca el substring más largo común en dos cadenas
 // y muestra su posición
-// 
-// @params str1: Primer cadena de caracteres que se usará para buscar el substring más largo
-// @params str2: Segunda cadena de caracteres que se usará para buscar el substring más largo
-// @params transmissionName: 
 //
-// @return: Imprime la información del substring más largo común entre las dos cadenas, 
+// @params transmission1: Primer cadena de caracteres que se usará para buscar el substring más largo
+// @params transmission2: Segunda cadena de caracteres que se usará para buscar el substring más largo
+//
+// @return: Imprime la información del substring más largo común entre las dos cadenas,
 //          además, indica la posición donde se encuentra en la cadena
 //
 // @complexity O(n^2)
@@ -179,13 +174,14 @@ int main() {
     cout << "mcode2: " << endl;
     searchMaliciousCode(transmission1Content, mcode2Content, "transmission01.txt");
     cout << " " << endl;
-    
+
     cout << "mcode3: " << endl;
     searchMaliciousCode(transmission1Content, mcode3Content, "transmission01.txt");
     cout << " " << endl;
-    
+
     cout << "        T R A N S M I S S I O N  2               " << endl;
     cout << " " << endl;
+
     cout << "mcode1: " << endl;
     searchMaliciousCode(transmission2Content, mcode1Content, "transmission02.txt");
     cout << " " << endl;
@@ -193,12 +189,13 @@ int main() {
     cout << "mcode2: " << endl;
     searchMaliciousCode(transmission2Content, mcode2Content, "transmission02.txt");
     cout << " " << endl;
-    
+
     cout << "mcode3: " << endl;
     searchMaliciousCode(transmission2Content, mcode3Content, "transmission02.txt");
     cout << " " << endl;
 
-    cout << "        S U B S T R I N G  M A S  L A R G O       " << endl;
+
+    cout << "        S U B S T R I N G  C O M P A R T I D O  M A S  L A R G O       " << endl;
     cout << " " << endl;
     cout << findLongestCommonSubstring(transmission1Content, transmission2Content);
     cout << "\n" << endl;
