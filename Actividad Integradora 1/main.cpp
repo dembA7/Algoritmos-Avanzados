@@ -117,6 +117,8 @@ void searchSubstringPositions(const string &transmission, const string &substrin
 string findLongestCommonSubstring(const string& transmission1, const string& transmission2) {
     int len1 = transmission1.length();
     int len2 = transmission2.length();
+
+    vector<vector<int>> dp(len1 + 1, vector<int>(len2 + 1, 0));
     
     int maxLength = 0;
     int endIndex = 0;
