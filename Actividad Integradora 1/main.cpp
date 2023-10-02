@@ -74,7 +74,7 @@ void searchMaliciousCode(const string& transmission, const string& maliciousCode
     }
 
     if (startPos == 0) {
-        cout << "Codigo Malicioso: '" << maliciousCode << "' no encontrado en (" << transmissionName << ")" << endl;
+        cout << "(false) Cadena '" << maliciousCode << "' no encontrada en " << transmissionName << endl;
     }
 }
 
