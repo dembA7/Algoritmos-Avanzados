@@ -118,7 +118,7 @@ string findLongestCommonSubstring(const string& transmission1, const string& tra
     int len1 = transmission1.length();
     int len2 = transmission2.length();
 
-    vector<vector<int>> dp(len1 + 1, vector<int>(len2 + 1, 0));
+    vector<vector<int > > dp(len1 + 1, vector<int>(len2 + 1, 0));
     
     int maxLength = 0;
     int endIndex = 0;
