@@ -48,7 +48,6 @@ string readFromFile(const string& filename) {
     return buffer;
 }
 
-
 // ==========================================================================================
 // Función searchMaliciousCode, busca si una subcadena de código malicioso está contenido 
 // en un archivo de transmisión y muestra la posición donde se encuentra
@@ -90,7 +89,7 @@ void searchMaliciousCode(const string& transmission, const string& maliciousCode
 // @complexity O(n)
 // ==========================================================================================
 
-void searchSubstring(const string &transmission, const string &substring) {
+void searchSubstringPositions(const string &transmission, const string &substring) {
     size_t startPos = 0;
     size_t pos = transmission.find(substring, startPos);
 
@@ -101,9 +100,6 @@ void searchSubstring(const string &transmission, const string &substring) {
         pos = transmission.find(substring, startPos);
     }
 }
-
-
-
 
 // ==========================================================================================
 // Función findLongestCommonSubstring, busca el substring más largo común en dos cadenas
@@ -121,8 +117,7 @@ void searchSubstring(const string &transmission, const string &substring) {
 string findLongestCommonSubstring(const string& transmission1, const string& transmission2) {
     int len1 = transmission1.length();
     int len2 = transmission2.length();
-
-    vector<vector<int>> dp(len1 + 1, vector<int>(len2 + 1, 0));
+    
     int maxLength = 0;
     int endIndex = 0;
 
@@ -213,11 +208,11 @@ int main() {
     cout << " " << endl;
 
     cout << "Posiciones en la transmission1: " << endl;
-    searchSubstring(transmission1Content, longestCommonSubstring);
+    searchSubstringPositions(transmission1Content, longestCommonSubstring);
     cout << "\n" << endl;
 
     cout << "Posiciones en la transmission2: " << endl;
-    searchSubstring(transmission2Content, longestCommonSubstring);
+    searchSubstringPositions(transmission2Content, longestCommonSubstring);
     cout << "\n" << endl;
     return 0;
 }
