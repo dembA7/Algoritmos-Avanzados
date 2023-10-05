@@ -213,7 +213,7 @@ void searchSubstringPositions(const string &transmission, const string &substrin
         if (j == longitudPatron) {
             int inicio = i - j;
             int fin = i - 1;
-            coincidencias.push_back(make_pair(inicio, fin));
+            coincidencias.push_back(make_pair(inicio + 1, fin + 1));
             j = lps[j - 1];
         } else if (i < longitudTexto && substring[j] != transmission[i]) {
             if (j != 0) {
