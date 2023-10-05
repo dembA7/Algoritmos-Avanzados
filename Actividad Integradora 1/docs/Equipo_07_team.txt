@@ -1,13 +1,16 @@
 Arturo Díaz López  - A01709522: 
 	Implementación de “searchSubstringPositions”
+	Implementación de “findLongestPalindrome”
 	Presentación actividad Integradora
 
 Diego Vega Camacho - A01704492: 
-	Implementación de “searchMaliciousCode
+	Implementación de “searchMaliciousCode”
 	Reporte actividad integradora
 	Presentación actividad Integradora
 
 Ian Padrón Corona  - A01708940: 
 	Implementación de la función “findLongestCommonSubstring”
+	Implementación de “searchMaliciousCode”
+	Implementación de la función “calcularLPS”
 	Reporte actividad integradora
 	Presentación actividad Integradora
