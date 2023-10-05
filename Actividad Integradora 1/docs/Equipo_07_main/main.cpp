@@ -6,7 +6,7 @@
 //          Diego Vega Camacho - A01704492
 //          Ian Padrón Corona  - A01708940
 //
-// Description: Algoritmo que permite buscar un código malicioso en un archivo de transmisión
+// Description: Programa que permite buscar un código malicioso en un archivo de transmisión
 //              y encontrar el palíndromo más largo en una cadena.
 //
 // ==========================================================================================
@@ -18,6 +18,7 @@
 #include <vector>
 
 using namespace std;
+
 
 // ==========================================================================================
 // Función readFromFile, lee el contenido de un archivo y lo devuelve como una cadena de 
@@ -39,14 +40,48 @@ string readFromFile(const string& filename) {
     std::string buffer;
     std::string line;
 
-    while (std::getline(file, line))
-    {
+    while (std::getline(file, line)) {
         buffer += line;
     }
 
     file.close();
     return buffer;
 }
+
+
+// ==========================================================================================
+// Funcion calcularLPS: Calcula el arreglo de prefijos y sufijos más largo de un patrón
+//
+// @params patron: Patrón que se desea analizar
+// @return: Regresa el arreglo de prefijos y sufijos más largo de un patrón
+// @complexity O(n)
+// =========================================================================================
+
+vector<int> calcularLPS(const string &patron) {
+    int longitudPatron = patron.length();
+    vector<int> lps(longitudPatron);
+
+    int longitudActual = 0;
+    int i = 1;
+
+    while (i < longitudPatron) {
+        if (patron[i] == patron[longitudActual]) {
+            longitudActual++;
+            lps[i] = longitudActual;
+            i++;
+        } else {
+            if (longitudActual != 0) {
+                longitudActual = lps[longitudActual - 1];
+            } else {
+                lps[i] = 0;
+                i++;
+            }
+        }
+    }
+
+    return lps;
+}
+
 
 // ==========================================================================================
 // Función searchMaliciousCode, busca si una subcadena de código malicioso está contenido 
@@ -58,55 +93,58 @@ string readFromFile(const string& filename) {
 //
 // @return: Regresa true o false dependiendo si el código malicioso está contenido en el
 //          archivo de transmisión
+//
 // @complexity O(n)
 // ==========================================================================================
 
 void searchMaliciousCode(const string& transmission, const string& maliciousCode, const string& transmissionName) {
-    size_t pos = transmission.find(maliciousCode);
-    size_t startPos = 0;
+    int longitudTexto = transmission.length();
+    int longitudPatron = maliciousCode.length();
+    vector<pair<int, int>> coincidencias;
 
-    while (pos != string::npos) {
-        size_t endPos = pos + maliciousCode.length() - 1;
-        cout << "(true) Posicion inicial: " << pos << "  Posicion final: " << endPos << endl;
-        startPos = pos + maliciousCode.length();
-        pos = transmission.find(maliciousCode, startPos);
+    vector<int> lps = calcularLPS(maliciousCode);
+
+    int i = 0;
+    int j = 0;
+
+    while (i < longitudTexto) {
+        if (maliciousCode[j] == transmission[i]) {
+            i++;
+            j++;
+        }
+
+        if (j == longitudPatron) {
+            int inicio = i - j;
+            int fin = i - 1;
+            coincidencias.push_back(make_pair(inicio, fin));
+            j = lps[j - 1];
+        } else if (i < longitudTexto && maliciousCode[j] != transmission[i]) {
+            if (j != 0) {
+                j = lps[j - 1];
+            } else {
+                i++;
+            }
+        }
     }
 
-    if (startPos == 0) {
-        cout << "(false) Cadena '" << maliciousCode << "' no encontrada en " << transmissionName << endl;
+    if (coincidencias.empty()) { 
+        cout << "(false): Codigo malicioso: '" << maliciousCode << "' no encontrado en ("<< transmissionName << ")" << endl; }
+    else {
+        for (const auto &coincidencia : coincidencias) {
+            cout << "(true) Posicion inicial: " << coincidencia.first << " Posicion final: " << coincidencia.second << endl;
+        }
     }
 }
 
-// ==========================================================================================
-// Función searchSubstring, busca una subcadena en una cadena de transmisión y muestra la
-//  posición donde se encuentra
-//
-// @params transmission: Texto de transmisión que se desea analizar
-// @params substring: Subcadena que se desea buscar
-//
-// @return: Retorna los indices donde se encuentra la subcadena en la cadena de transmisión.
-//         
-// @complexity O(n)
-// ==========================================================================================
-
-void searchSubstringPositions(const string &transmission, const string &substring) {
-    size_t startPos = 0;
-    size_t pos = transmission.find(substring, startPos);
-
-    while (pos != string::npos) {
-        size_t endPos = pos + substring.length();
-        cout << "Posicion inicial: " << pos + 1 << "  Posicion final: " << endPos << endl;
-        startPos = pos + 1;
-        pos = transmission.find(substring, startPos);
-    }
-}
 
 // ==========================================================================================
 // Función findLongestCommonSubstring, busca el substring más largo común en dos cadenas
 // y muestra su posición
 //
-// @params transmission1: Primer cadena de caracteres que se usará para buscar el substring más largo
-// @params transmission2: Segunda cadena de caracteres que se usará para buscar el substring más largo
+// @params transmission1: Primer cadena de caracteres que se usará para buscar el substring 
+//                        más largo
+// @params transmission2: Segunda cadena de caracteres que se usará para buscar el substring 
+//                        más largo
 //
 // @return: Imprime la información del substring más largo común entre las dos cadenas,
 //          además, indica la posición donde se encuentra en la cadena
@@ -139,10 +177,119 @@ string findLongestCommonSubstring(const string& transmission1, const string& tra
     if (maxLength > 0) {
         return transmission1.substr(startIndex, maxLength);
     } else {
-        return "Archivo tranmision no valido";
+        return "Archivo transmision no valido";
     }
 }
 
+
+// ==========================================================================================
+// Función searchSubstringPositions, busca una subcadena en una cadena de transmisión y muestra la
+//  posición donde se encuentra
+//
+// @params transmission: Texto de transmisión que se desea analizar
+// @params substring: Subcadena que se desea buscar
+//
+// @return: Retorna los indices donde se encuentra la subcadena en la cadena de transmisión.
+//         
+// @complexity O(n)
+// ==========================================================================================
+
+void searchSubstringPositions(const string &transmission, const string &substring) {
+    int longitudTexto = transmission.length();
+    int longitudPatron = substring.length();
+    vector<pair<int, int>> coincidencias;
+
+    vector<int> lps = calcularLPS(substring);
+
+    int i = 0;
+    int j = 0;
+
+    while (i < longitudTexto) {
+        if (substring[j] == transmission[i]) {
+            i++;
+            j++;
+        }
+
+        if (j == longitudPatron) {
+            int inicio = i - j;
+            int fin = i - 1;
+            coincidencias.push_back(make_pair(inicio + 1, fin + 1));
+            j = lps[j - 1];
+        } else if (i < longitudTexto && substring[j] != transmission[i]) {
+            if (j != 0) {
+                j = lps[j - 1];
+            } else {
+                i++;
+            }
+        }
+    }
+
+    if (coincidencias.empty()) {
+        cout << "(false): No hay posiciones para el substring compartido." << endl;
+    }
+    else {
+        for (const auto &coincidencia : coincidencias) {
+            cout << "Posicion inicial: " << coincidencia.first << " Posicion final: " << coincidencia.second << endl;
+        }
+    }
+}
+
+// ==========================================================================================
+// Función findLongestPalindrome, busca el substring más largo en una cadena palíndroma
+//
+// @params text: Cadena de caracteres que se usará para buscar el substring más largo
+// @params longestPalindrome: Subcadena más larga que se encontró en la cadena
+// @params startIndex: Posición inicial donde se encuentra el substring más largo
+// @params endIndex: Posición final donde se encuentra el substring más largo
+//
+// @return: Información del palíndromo del substring más largo que se encontró en la cadena
+//
+// @complexity O(n^2)
+// ==========================================================================================
+
+void findLongestPalindrome(string text, string& longestPalindrome, int& startIndex, int& endIndex) {
+    int n = text.length();
+    int table[n][n] = {0};
+    
+    int maxLength = 1;
+    int start = 0;
+
+    for (int i = 0; i < n; i++) {
+        table[i][i] = 1;
+    }
+
+    for (int i = 0; i < n - 1; i++) {
+        if (text[i] == text[i+1]) {
+            table[i][i+1] = 1;
+            start = i;
+            maxLength = 2;
+        }
+    }
+
+    for (int cl = 3; cl <= n; cl++) {
+        for (int i = 0; i < n - cl + 1; i++) {
+            int j = i + cl - 1;
+            if (text[i] == text[j] && table[i + 1][j - 1]) {
+                table[i][j] = 1;
+                start = i;
+                maxLength = cl;
+            }
+        }
+    }
+
+    longestPalindrome = text.substr(start, maxLength);
+    startIndex = start + 1;
+    endIndex = start + maxLength;
+}
+
+
+// ==========================================================================================
+// Función main, función principal del programa
+//
+// @return: 0 si el programa se ejecutó correctamente
+//
+// @complexity O(n)
+// ==========================================================================================
 
 int main() {
     string mcode1Content = readFromFile("mcode01.txt");
@@ -216,5 +363,25 @@ int main() {
     cout << "Posiciones en la transmission2: " << endl;
     searchSubstringPositions(transmission2Content, longestCommonSubstring);
     cout << "\n" << endl;
+    
+    cout << "        P A L I N D R O M O  M A S  L A R G O       " << endl;
+    cout << " " << endl;
+    string longestPalindrome;
+    int startIndex, endIndex;
+
+    cout << "Transmission 1" << endl;
+    findLongestPalindrome(transmission1Content, longestPalindrome, startIndex, endIndex);
+    cout << "Palindromo mas largo: " << longestPalindrome << endl;
+    cout << "Posicion inicial: " << startIndex << endl;
+    cout << "Posicion final: " << endIndex << endl;
+    cout << " " << endl;
+
+    cout << "Transmission 2" << endl;
+    findLongestPalindrome(transmission2Content, longestPalindrome, startIndex, endIndex);
+    cout << "Palindromo mas largo: " << longestPalindrome << endl;
+    cout << "Posicion inicial: " << startIndex << endl;
+    cout << "Posicion final: " << endIndex << endl;
+    cout << " " << endl;
+    
     return 0;
 }
