@@ -127,11 +127,57 @@ void searchMaliciousCode(const string& transmission, const string& maliciousCode
         }
     }
 
-    if (coincidencias.empty()) { cout << "(false): Codigo malicioso: '" << maliciousCode << "' no encontrado en ("<< transmissionName << ")" << endl; }
+    if (coincidencias.empty()) { 
+        cout << "(false): Codigo malicioso: '" << maliciousCode << "' no encontrado en ("<< transmissionName << ")" << endl; }
     else {
         for (const auto &coincidencia : coincidencias) {
             cout << "(true) Posicion inicial: " << coincidencia.first << " Posicion final: " << coincidencia.second << endl;
         }
+    }
+}
+
+
+// ==========================================================================================
+// Función findLongestCommonSubstring, busca el substring más largo común en dos cadenas
+// y muestra su posición
+//
+// @params transmission1: Primer cadena de caracteres que se usará para buscar el substring 
+//                        más largo
+// @params transmission2: Segunda cadena de caracteres que se usará para buscar el substring 
+//                        más largo
+//
+// @return: Imprime la información del substring más largo común entre las dos cadenas,
+//          además, indica la posición donde se encuentra en la cadena
+//
+// @complexity O(n^2)
+// ==========================================================================================
+
+string findLongestCommonSubstring(const string& transmission1, const string& transmission2) {
+    int len1 = transmission1.length();
+    int len2 = transmission2.length();
+
+    vector<vector<int > > dp(len1 + 1, vector<int>(len2 + 1, 0));
+    
+    int maxLength = 0;
+    int endIndex = 0;
+
+    for (int i = 1; i <= len1; i++) {
+        for (int j = 1; j <= len2; j++) {
+            if (transmission1[i - 1] == transmission2[j - 1]) {
+                dp[i][j] = dp[i - 1][j - 1] + 1;
+                if (dp[i][j] > maxLength) {
+                    maxLength = dp[i][j];
+                    endIndex = i - 1;
+                }
+            }
+        }
+    }
+
+    int startIndex = endIndex - maxLength + 1;
+    if (maxLength > 0) {
+        return transmission1.substr(startIndex, maxLength);
+    } else {
+        return "Archivo transmision no valido";
     }
 }
 
@@ -188,52 +234,6 @@ void searchSubstringPositions(const string &transmission, const string &substrin
     }
 }
 
-
-// ==========================================================================================
-// Función findLongestCommonSubstring, busca el substring más largo común en dos cadenas
-// y muestra su posición
-//
-// @params transmission1: Primer cadena de caracteres que se usará para buscar el substring 
-//                        más largo
-// @params transmission2: Segunda cadena de caracteres que se usará para buscar el substring 
-//                        más largo
-//
-// @return: Imprime la información del substring más largo común entre las dos cadenas,
-//          además, indica la posición donde se encuentra en la cadena
-//
-// @complexity O(n^2)
-// ==========================================================================================
-
-string findLongestCommonSubstring(const string& transmission1, const string& transmission2) {
-    int len1 = transmission1.length();
-    int len2 = transmission2.length();
-
-    vector<vector<int > > dp(len1 + 1, vector<int>(len2 + 1, 0));
-    
-    int maxLength = 0;
-    int endIndex = 0;
-
-    for (int i = 1; i <= len1; i++) {
-        for (int j = 1; j <= len2; j++) {
-            if (transmission1[i - 1] == transmission2[j - 1]) {
-                dp[i][j] = dp[i - 1][j - 1] + 1;
-                if (dp[i][j] > maxLength) {
-                    maxLength = dp[i][j];
-                    endIndex = i - 1;
-                }
-            }
-        }
-    }
-
-    int startIndex = endIndex - maxLength + 1;
-    if (maxLength > 0) {
-        return transmission1.substr(startIndex, maxLength);
-    } else {
-        return "Archivo transmision no valido";
-    }
-}
-
-
 // ==========================================================================================
 // Función findLongestPalindrome, busca el substring más largo en una cadena palíndroma
 //
@@ -242,7 +242,7 @@ string findLongestCommonSubstring(const string& transmission1, const string& tra
 // @params startIndex: Posición inicial donde se encuentra el substring más largo
 // @params endIndex: Posición final donde se encuentra el substring más largo
 //
-// @return: Información del substring más largo que se encontró en la cadena
+// @return: Información del palíndromo del substring más largo que se encontró en la cadena
 //
 // @complexity O(n^2)
 // ==========================================================================================
