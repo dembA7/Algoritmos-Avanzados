@@ -94,7 +94,7 @@ vector<int> calcularLPS(const string &patron) {
 // @return: Regresa true o false dependiendo si el código malicioso está contenido en el
 //          archivo de transmisión
 //
-// @complexity O(n)
+// @complexity O(n + m)
 // ==========================================================================================
 
 void searchMaliciousCode(const string& transmission, const string& maliciousCode, const string& transmissionName) {
@@ -149,7 +149,7 @@ void searchMaliciousCode(const string& transmission, const string& maliciousCode
 // @return: Imprime la información del substring más largo común entre las dos cadenas,
 //          además, indica la posición donde se encuentra en la cadena
 //
-// @complexity O(n^2)
+// @complexity O(n * m)
 // ==========================================================================================
 
 string findLongestCommonSubstring(const string& transmission1, const string& transmission2) {
@@ -191,7 +191,7 @@ string findLongestCommonSubstring(const string& transmission1, const string& tra
 //
 // @return: Retorna los indices donde se encuentra la subcadena en la cadena de transmisión.
 //         
-// @complexity O(n)
+// @complexity O(n + m)
 // ==========================================================================================
 
 void searchSubstringPositions(const string &transmission, const string &substring) {
