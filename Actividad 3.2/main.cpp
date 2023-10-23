@@ -19,29 +19,34 @@ using namespace std;
 #define INF numeric_limits<int>::max()
 
 // ==========================================================================================
-// Función djikstra, imprime el arreglo de substrings ordenado alfabéticamente.
+// Función djikstra, imprime las distancias más cortas desde un nodo de inicio utilizando
+// el algoritmo de Dijkstra
 // 
-// @params n: Vector de strings que contiene los substrings del string original.
+// @params graph: Matriz de adyasencia que representa el grafo dirigido.
+// @params startNode: Nodo de inicio para el algoritmo.
+// @params distances: Vector de distancias más cortas desde el nodo de inicio.
 //
-// @return: Imprime el arreglo de substrings ordenado alfabéticamente.
-// @complexity O(n)
+// @return: Imprime las distancias más cortas desde un nodo de inicio utilizando
+// el algoritmo de Dijkstra
+//
+// @complexity O(n^3)
 // ==========================================================================================
 
-void dijkstra(vector<vector<int> > &graph, int startNode, vector<int> &distances) {
+void dijkstra(vector<vector<int> > &graph, int start, vector<int> &dist) {
 
-  int numNodes = graph.size();
-  vector<bool> visited(numNodes, false);
+  int nodes = graph.size();
+  vector<bool> visited(nodes, false);
 
-  distances.assign(numNodes, INF);
-  distances[startNode] = 0;
+  dist.assign(nodes, INF);
+  dist[start] = 0;
 
-  for (int i = 0; i < numNodes - 1; i++) {
-    int minDistance = INF, minNode = -1;
+  for (int i = 0; i < nodes - 1; i++) {
+    int minDist = INF, minNode = -1;
 
-    for (int node = 0; node < numNodes; node++) {
-      if (!visited[node] && distances[node] < minDistance) {
+    for (int node = 0; node < nodes; node++) {
+      if (!visited[node] && dist[node] < minDist) {
         minNode = node;
-        minDistance = distances[node];
+        minDist = dist[node];
       }
     }
 
@@ -50,11 +55,11 @@ void dijkstra(vector<vector<int> > &graph, int startNode, vector<int> &distances
 
     visited[minNode] = true;
 
-    for (int neighbour = 0; neighbour < numNodes; neighbour++) {
-      if (!visited[neighbour] && graph[minNode][neighbour] != INF) {
-        int newDistance = distances[minNode] + graph[minNode][neighbour];
-        if (newDistance < distances[neighbour]) {
-          distances[neighbour] = newDistance;
+    for (int neighbor = 0; neighbor < nodes; neighbor++) {
+      if (!visited[neighbor] && graph[minNode][neighbor] != INF) {
+        int newDist = dist[minNode] + graph[minNode][neighbor];
+        if (newDist < dist[neighbor]) {
+          dist[neighbor] = newDist;
         }
       }
     }
@@ -62,42 +67,48 @@ void dijkstra(vector<vector<int> > &graph, int startNode, vector<int> &distances
 }
 
 // ==========================================================================================
-// Función printSubstrings, imprime el arreglo de substrings ordenado alfabéticamente.
-// 
-// @params n: Vector de strings que contiene los substrings del string original.
+// Función djikstra, imprime las distancias más cortas desde un nodo de inicio utilizando
+// el algoritmo de Floyd.
 //
-// @return: Imprime el arreglo de substrings ordenado alfabéticamente.
-// @complexity O(n)
+// @params graph: Matriz de adyasencia que representa el grafo dirigido.
+//
+// @return: Imprime las distancias más cortas desde un nodo de inicio utilizando
+// el algoritmo de Floyd.
+//
+// @complexity O(n^3)
 // ==========================================================================================
 
 void floyd(vector<vector<int> > &graph) {
 
-  int numNodes = graph.size();
+  int nodes = graph.size();
 
-  for (int i = 0; i < numNodes; i++)
-    for (int j = 0; j < numNodes; j++)
-      for (int k = 0; k < numNodes; k++)
+  for (int i = 0; i < nodes; i++)
+    for (int j = 0; j < nodes; j++)
+      for (int k = 0; k < nodes; k++)
         if (graph[j][i] != INF && graph[i][k] != INF &&
             graph[j][i] + graph[i][k] < graph[j][k])
           graph[j][k] = graph[j][i] + graph[i][k];
 }
 
 // ==========================================================================================
-// Función main, imprime el arreglo de substrings ordenado alfabéticamente.
-// 
-// @params n: Vector de strings que contiene los substrings del string original.
+// Función main, recibe la matriz de adyasencia que representa el grafo dirigido y llama a
+// las funciones de Dijkstra y Floyd.
 //
-// @return: Imprime el arreglo de substrings ordenado alfabéticamente.
+// @return: Imprime las distancias más cortas desde un nodo de inicio utilizando
+// el algoritmo de Dijkstra y Floyd.
+//
 // @complexity O(n)
 // ==========================================================================================
 
 int main() {
   int graphSize;
 
-  cout << "Ingrese el tamaño de su grafo: ";
+  cout << "\nD J I K S T R A  A N D  F L O Y D  A L G O R I T H M S \n";
+
+  cout << "\nIngrese el tamaño de su grafo: ";
   cin >> graphSize;
 
-  cout << "Ingrese los pesos de las conexiones\n";
+  cout << "\nIngrese la matriz:\n";
 
   vector<vector<int> > graph(graphSize, vector<int>(graphSize));
 
@@ -108,7 +119,7 @@ int main() {
       graph[i][j] = buffer == -1 ? INF : buffer;
     }
 
-  cout << "Dijkstra results:" << endl;
+  cout << "\nDijkstra results:" << endl;
   for (int i = 0; i < graphSize; i++) {
     vector<int> distances;
     dijkstra(graph, i, distances);
@@ -116,7 +127,7 @@ int main() {
     for (int j = 0; j < distances.size(); j++) {
       if (j == i)
         continue;
-      cout << "From node "
+      cout << "node "
            << i + 1 << " to node "
            << j + 1 << ": ";
       if (distances[j] == INF)
@@ -138,4 +149,6 @@ int main() {
     }
     cout << endl;
   }
+  
+  cout << " \n" << endl;
 }
