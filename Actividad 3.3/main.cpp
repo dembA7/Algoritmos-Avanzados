@@ -87,7 +87,7 @@ int main() {
         cin >> weights[i];
     }
 
-    cout << "Peso de la mochila:" << endl;
+    cout << "Peso maximo de la mochila:" << endl;
     int W;
     cin >> W;
 
