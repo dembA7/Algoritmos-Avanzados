@@ -79,14 +79,14 @@ bool graphColoring(vector<vector<int> >& graph, int m) {
     vector<int> color(graph.size(), -1);
 
     if (graphColoringAux(graph, m, color, 0)){
-        cout << "Solución encontrada" << endl;
+        cout << "\nSolución encontrada" << endl;
         for (int i = 0; i < color.size(); i++){
             cout << "Vertice " << i << " = Color " << color[i] << endl;
         }
         return true;
     }
     else{
-        cout << "No existe solución" << endl;
+        cout << "\nNo existe solución" << endl;
         return false;
     }
 }
@@ -105,11 +105,11 @@ bool graphColoring(vector<vector<int> >& graph, int m) {
 // ==========================================================================================
 int main(){
     int n;
-    cout << "Ingrese el número de nodos: ";
+    cout << "\nIngrese el número de nodos: ";
     cin >> n;
 
     vector<vector<int> > graph(n, vector<int>(n));
-    cout << "Ingrese la matriz de adyacencia: " << endl;
+    cout << "\nIngrese la matriz de adyacencia: " << endl;
     for (int i = 0; i < n; i++){
         for (int j = 0; j < n; j++){
             cin >> graph[i][j];
@@ -117,7 +117,7 @@ int main(){
     }
 
     int m;
-    cout << "Ingrese el número de colores: ";
+    cout << "\nIngrese el número de colores: ";
     cin >> m;
 
     graphColoring(graph, m);
