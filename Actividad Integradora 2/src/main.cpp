@@ -363,6 +363,20 @@ int fordFulkerson(int n, const vector<vector<int>> &fluxMatrix, int s, int t) {
 }
 
 // ==========================================================================================
+// Función distanceBetweenColonies, calcula la distancia euclidiana entre dos colonias
+//
+// @params colony1: Par ordenado que representa la ubicación en un plano de la primera colonia
+// @params colony2: Par ordenado que representa la ubicación en un plano de la segunda colonia
+//
+// @return: Regresa la distancia euclidiana entre las dos colonias
+// @complexity O(1)
+// ==========================================================================================
+
+double distanceBetweenColonies(const pair<int, int> &colony1, pair<int, int> &colony2) {
+    return sqrt(pow(colony1.first - colony2.first, 2) + pow(colony1.second - colony2.second, 2));
+}
+
+// ==========================================================================================
 // Función findNearestCentral, encuentra la central más cercana a una colonia
 //
 // @params newCentral: Par ordenado que representa la ubicación en un plano de la nueva
@@ -374,10 +388,6 @@ int fordFulkerson(int n, const vector<vector<int>> &fluxMatrix, int s, int t) {
 //
 // @complexity
 // ==========================================================================================
-
-double distanceBetweenColonies(const pair<int, int> &colony1, pair<int, int> &colony2) {
-    return sqrt(pow(colony1.first - colony2.first, 2) + pow(colony1.second - colony2.second, 2));
-}
 
 int findNearestCentral(pair<int, int> &newCentral, vector<pair<int, int>> &centralLocations) {
     int nearestCentral = -1;
