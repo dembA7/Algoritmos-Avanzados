@@ -6,8 +6,12 @@
 //          Diego Vega Camacho - A01704492
 //          Ian Padrón Corona  - A01708940
 //
-// Description: Programa que permite buscar un código malicioso en un archivo de transmisión
-//              y encontrar el palíndromo más largo en una cadena.
+// Description: Programa que permite encontrar la distancia mínima entre una colonia y todas
+//              las demás en una ciudad, así como la distancia mínima entre dos colonias
+//              cualesquiera. El programa lee los datos de un archivo de texto y los almacena
+//              en una estructura de datos. Posteriormente, se aplica el algoritmo de Dijkstra
+//              para encontrar la distancia mínima entre una colonia y todas las demás.
+//              Finalmente, se imprimen los resultados en la consola.
 //
 // ==========================================================================================
 
@@ -15,75 +19,103 @@
 #include <fstream>
 #include <sstream>
 #include <vector>
-#include <limits>
-#include <cmath>
-#include <algorithm>
 #include <queue>
-#include <string>
+#include <climits>
 
 using namespace std;
 
-const int INF = numeric_limits<int>::max();
-struct Colony {
-    int x;
-    int y;
+// ==========================================================================================
+// Struct City, contiene los atributos necesarios para representar una ciudad
+//
+// @params nCities: Número de colonias en la ciudad
+// @params distBtwnClnies: Distancias en kms entre las colonias de la ciudad
+// @params maxFluxBtwnClnies: Capacidades máximas de flujo de datos entre colonia i y colonia j
+// @params coordsClnies: Pares ordenados que representan la ubicación en un plano de las
+//                       centrales
+// @params coordsNewClny: Par ordenado que representa la ubicación en un plano de la nueva central
+// ==========================================================================================
 
-    Colony(int _x, int _y): x(_x), y(_y) {}
+struct City {
+
+    int nCities;
+    vector<vector<int>> distBtwnClnies;
+    vector<vector<int>> maxFluxBtwnClnies;
+    vector<pair<int, int>> coordsClnies;
+    pair<int, int> coordsNewClny;
+
+    City(int n) :
+        nCities(n),
+        distBtwnClnies(n, std::vector<int>(n, 0)),
+        maxFluxBtwnClnies(n, std::vector<int>(n, 0)),
+        coordsClnies(n, std::pair<int, int>(0, 0)),
+        coordsNewClny(0, 0) {}
+
+    friend std::ostream &operator<<(std::ostream &os, const City &city) {
+        os << "distBtwnClnies:" << endl;
+        for (const auto &row : city.distBtwnClnies) {
+            for (const auto &elem : row) {
+                os << elem << ' ';
+            }
+            os << std::endl;
+        }
+
+        os << "maxFluxBtwnClnies:" << endl;
+        for (const auto &row : city.maxFluxBtwnClnies) {
+            for (const auto &elem : row) {
+                os << elem << ' ';
+            }
+            os << endl;
+        }
+
+        os << "coordsClnies:" << endl;
+        for (const auto &coord : city.coordsClnies) {
+            os << '(' << coord.first << ", " << coord.second << ')' << endl;
+        }
+
+        os << "coordsNewClny: (" << city.coordsNewClny.first << ", " << city.coordsNewClny.second << ')' << endl;
+
+        return os;
+    }
 };
 
+
 // ==========================================================================================
-// Función readFromFile, lee el contenido de un archivo y aplica un recorrido sobre el mismo
-// para almacenar los valores correspondientes a las respectivas variables para su análisis
-// posterior
-// 
-// @params filename: Archivo que se desea leer
-// @params n: Número de colonias en la ciudad
-// @params graph: Distancias en kms entre las colonias de la ciudad
-// @params capacity: Capacidades máximas de flujo de datos entre colonia i y colonia j
-// @params centralLocations: Pares ordenados que representan la ubicación en un plano de las
-//                           centrales
-// @params newCentral: Par ordenado que representa la ubicación en un plano de la nueva central
+// Función readFromFile, lee el contenido de un archivo y lo devuelve como una cadena de
+// caracteres
 //
-// @return: Regresa true si el archivo se pudo abrir y leer correctamente, false en caso
-//          contrario
-// @complexity
+// @params filename: Nombre del archivo a leer
+//
+// @return: Regresa el contenido del archivo como una cadena de caracteres
+// @complexity O(n)
 // ==========================================================================================
 
-bool readFromFile(const string &filename)
-{
+City readFromFile(const string &filename) {
+    
     ifstream inputFile(filename);
-
-    if(!inputFile.is_open()) {
+    if (!inputFile.is_open()) {
         cout << "No se pudo abrir el archivo" << endl;
         exit(EXIT_FAILURE);
     }
 
     int n;
     inputFile >> n;
-
-    vector<vector<int> > distBtwnClnies(n, vector<int>(n, 0));
-    vector<vector<int> > maxFluxBtwnClnies(n, vector<int>(n, 0));
-    vector<pair<int, int> > coordsClnies(n, pair<int, int>(0, 0));
-    pair<int, int> coordsNewClny(0, 0);
-
-    for (int i = 0; i < n; ++i)
-    {
-        for (int j = 0; j < n; ++j)
-        {
-            inputFile >> distBtwnClnies[i][j];
+    
+    City city(n);
+    city.nCities = n;
+    
+    for (int i = 0; i < n; ++i) {
+        for (int j = 0; j < n; ++j) {
+            inputFile >> city.distBtwnClnies[i][j];
         }
     }
 
-    for (int i = 0; i < n; ++i)
-    {
-        for (int j = 0; j < n; ++j)
-        {
-            inputFile >> maxFluxBtwnClnies[i][j];
+    for (int i = 0; i < n; ++i) {
+        for (int j = 0; j < n; ++j) {
+            inputFile >> city.maxFluxBtwnClnies[i][j];
         }
     }
 
-    for (int i = 0; i < n + 1; ++i)
-    {
+    for (int i = 0; i < n + 1; ++i) {
         string linea = "";
         inputFile >> linea;
 
@@ -93,314 +125,111 @@ bool readFromFile(const string &filename)
         int x, y;
         ss >> paren >> x >> comma >> y >> paren;
 
-        if (i <= n)
-        {
-            coordsClnies[i] = pair<int, int>(x, y);
-        }
-        else
-        {
-            coordsNewClny = pair<int, int>(x, y);
-        }
+        (i < n) ? city.coordsClnies[i] = pair<int, int>(x, y) : city.coordsNewClny = pair<int, int>(x, y);
+
     }
-    return true;
+
+    return city;
 }
 
-// ==========================================================================================
-// Función dijkstra, implementación del algoritmo de Dijkstra para encontrar la forma óptima
-// de cablear las colonias de la ciudad
-// 
-// @params graph: Distancias en kms entre las colonias de la ciudad
-// @params start: Nodo inicial del grafo
-//
-// @return: Lista de arcos que representan la forma óptima de cablear las colonias de la 
-//          ciudad
-//
-// @complexity 
-// ==========================================================================================
-
-// vector<pair<int, int> > dijkstra(const vector<vector<int> >& graph, int start){
-//     int n = graph.size();
-//     vector<int> distance(n, INF);
-//     vector<bool> visited(n, false);
-//     vector<pair<int, int> > result; 
-
-//     priority_queue<pair<int, int>, vector<pair<int, int> >, greater<pair<int, int> > > pq;
-
-//     distance[start] = 0;
-//     pq.push({0, start});
-
-//     while(!pq.empty()){
-//         int u = pq.top().second;
-//         pq.pop();
-
-//         if(visited[u]) continue;
-//         visited[u] = true;
-
-//         for(int v = 0; v < n; v++){
-//             if(!visited[v] && graph[u][v] < distance[v]){
-//                 distance[v] = graph[u][v];
-//                 pq.push({distance[v], v});
-//                 result.push_back({u, v});
-//             }
-//         }
-//     }
-//     return result;
-// }
 
 // ==========================================================================================
-// Función salesmanProblem, implementación del algoritmo del vendedor, para encontrar el
-// camino más corto que recorra todas las colonias de la ciudad al menos una vez y regrese
-// a la colonia inicial
-// 
-// @params graph: Distancias en kms entre las colonias de la ciudad
-// @params start: Nodo inicial del grafo
+// Función minDistance, encuentra la distancia mínima entre dos colonias
 //
-// @return: Regresa la ruta más corta a seguir para recorrer todas las colonias de la ciudad
-//          al menos una vez y regresar a la colonia inicial
+// @params n: Número de colonias en la ciudad
+// @params dist: Distancias en kms entre las colonias de la ciudad
+// @params sptSet: Arreglo de booleanos que indica si una colonia ya fue visitada
 //
-// @complexity 
+// @return: Regresa el índice de la colonia con la distancia mínima
+// @complexity O(n)
 // ==========================================================================================
 
-vector<int> salesmanProblem(const vector<vector<int> >& graph, int start){
-    int n = graph.size();
-    vector<int> path;
-    vector<int> vertices(n);
+int minDistance(int n, const vector<int> &dist, const vector<bool> &sptSet) {
+    int min = INT_MAX, min_index;
 
-    for(int i = 0; i < n; i++){
-        if(i != start) {
-            vertices[i] = i;
+    for (int v = 0; v < n; v++) {
+        if (!sptSet[v] && dist[v] <= min) {
+            min = dist[v];
+            min_index = v;
         }
     }
 
-    int minPath = INF;
-    do {
-        int currentPath = 0;
-        int k = start;
-
-        for(int i = 0; i < n - 1; i++){
-            currentPath += graph[k][vertices[i]];
-            k = vertices[i];
-        }
-
-        currentPath += graph[k][start];
-
-        if(currentPath < minPath){
-            minPath = currentPath;
-            path = vertices;
-        }
-    } while(next_permutation(vertices.begin(), vertices.end()));
-
-    path.push_back(start);
-    path.insert(path.begin(), start);
-
-    return path;
+    return min_index;
 }
 
-// ==========================================================================================
-// Función fordFulkerson, implementación del algoritmo de Ford-Fulkerson, para calcular el
-// flujo máximo de datos entre las colonias de la ciudad desde el nodo inicial hasta el nodo
-// final
-// 
-// @params capacity: Capacidades máximas de flujo de datos entre colonia i y colonia j
-// @params start: Nodo inicial del grafo
-// @params end: Nodo final del grafo
-//
-// @return: Regresa el flujo máximo de datos entre las colonias de la ciudad desde el nodo
-//          inicial hasta el nodo final
-//
-// @complexity 
-// ==========================================================================================
-
-int fordFulkerson(const vector<vector<int > >& capacity, int start, int end){
-    int n = capacity.size();
-    vector<vector<int> > residualCapacity = capacity;
-    vector<int> parent(n - 1);
-    int maxFlow = 0;
-
-    while (true) {
-        vector<bool> visited(n, false);
-        queue<int> q;
-
-        q.push(start);
-        visited[start] = true;
-
-        while (!q.empty()) {
-            int u = q.front();
-            q.pop();
-
-            for (int v = 0; v < n; v++) {
-                if (!visited[v] && residualCapacity[u][v] > 0) {
-                    q.push(v);
-                    parent[v] = u;
-                    visited[v] = true;
-                }
-            }
-        }
-
-        if (!visited[end]) break;
-
-        int pathFlow = INF;
-        for (int v = end; v != start; v = parent[v]) {
-            int u = parent[v];
-            pathFlow = min(pathFlow, residualCapacity[u][v]);
-        }
-
-        for (int v = end; v != start; v = parent[v]) {
-            int u = parent[v];
-            residualCapacity[u][v] -= pathFlow;
-            residualCapacity[v][u] += pathFlow;
-        }
-
-        maxFlow += pathFlow;
-    }
-
-    return maxFlow;
-}
 
 // ==========================================================================================
-// Función findNearestCentral, encuentra la central más cercana a una colonia
-// 
-// @params newCentral: Par ordenado que representa la ubicación en un plano de la nueva 
-// central
-// @params centralLocations: Pares ordenados que representan la ubicación en un plano de las
-// centrales
+// Función printSolution, imprime la solución del problema
 //
-// @return: Índice de la central más cercana a la colonia utilizando la distancia euclidiana
+// @params city: Ciudad a la que se le aplicó el algoritmo
+// @params n: Número de colonias en la ciudad
+// @params dist: Distancias en kms entre las colonias de la ciudad
 //
-// @complexity
+// @complexity O(n)
 // ==========================================================================================
 
-double distanceBetweenColonies(const Colony& colony1, const Colony& colony2){
-    return sqrt(pow(colony1.x - colony2.x, 2) + pow(colony1.y - colony2.y, 2));
-}
-
-int findNearestCentral(const Colony& newCentral, const vector<Colony>& centralLocations){
-    int nearestCentral = -1;
-    double minDistance = INF;
-
-    for(int i = 0; i < centralLocations.size(); i++){
-        double distance = distanceBetweenColonies(newCentral, centralLocations[i]);
-        if(distance < minDistance){
-            minDistance = distance;
-            nearestCentral = i;
+void printSolution(int city, int n, const vector<int> &dist) {
+    for (int i = 0; i < n; i++) {
+        if (i != city) {
+            cout << "Colonia " << city + 1 << " a colonia " << i + 1 << ": " <<  dist[i] << endl;
         }
     }
-    return nearestCentral;
 }
 
+
 // ==========================================================================================
-// Función readFromFile, lee el contenido de un archivo y aplica un recorrido sobre el mismo
-// para almacenar los valores correspondientes a las respectivas variables para su análisis
-// posterior
-// 
-// @params filename: Archivo que se desea leer
+// Función dijkstra, implementación del algoritmo de Dijkstra para encontrar la distancia
+// mínima entre una colonia y todas las demás
+//
 // @params n: Número de colonias en la ciudad
 // @params graph: Distancias en kms entre las colonias de la ciudad
-// @params capacity: Capacidades máximas de flujo de datos entre colonia i y colonia j
-// @params centralLocations: Pares ordenados que representan la ubicación en un plano de las
-//                           centrales
-// @params newCentral: Par ordenado que representa la ubicación en un plano de la nueva central
+// @params city: Colonia a la que se le aplicará el algoritmo
 //
-// @return: Regresa true si el archivo se pudo abrir y leer correctamente, false en caso
-//          contrario
 // @complexity O(n)
 // ==========================================================================================
 
-// void outputFile(const string& filename, const vector<pair<int, int> >& optimalCabling, const vector<int>& deliverPath, int maxFlow, double shortestDistance){
-//     ofstream outputFile(filename);
+void dijkstra(int n, const vector<vector<int>> &graph, int city) {
+    vector<int> dist(n, INT_MAX);
+    vector<bool> sptSet(n, false);
 
-//     if(!outputFile.is_open()) {
-//         cout << "No se pudo abrir el archivo" << endl;
-//         return;
-//     }
-//     outputFile << "Cableado óptimo: " << endl;
-//     for (const)
-// }
+    dist[city] = 0;
+
+    for (int count = 0; count < n - 1; count++) {
+        int u = minDistance(n, dist, sptSet);
+
+        sptSet[u] = true;
+
+        for (int v = 0; v < n; v++) {
+            if (!sptSet[v] && graph[u][v] && dist[u] != INT_MAX &&
+                dist[u] + graph[u][v] < dist[v]) {
+                dist[v] = dist[u] + graph[u][v];
+            }
+        }
+    }
+
+    printSolution(city, n, dist);
+}
+
 
 // ==========================================================================================
-// Función readFromFile, lee el contenido de un archivo y lo devuelve como una cadena de 
-// caracteres
-// 
-// @params filename: Archivo que se desea leer
+// Función main, función principal del programa
 //
-// @return: Regresa el contenido del archivo como una cadena de caracteres
+// @params argc: Número de argumentos
+// @params argv: Arreglo de argumentos
+//
+// @return: Regresa 0 si el programa termina correctamente
 // @complexity O(n)
 // ==========================================================================================
 
-int main() {
+int main(int argc, char *argv[]) {
 
-    cout << readFromFile("input01.txt");
-    
+    cout << "\nPunto 01\n" << endl;
+    City c1 = readFromFile("input01.txt");
 
-    // // Numero de colonias en la ciudad
-    // int n;
-    // cin >> n;
-    
-    // // Distancias en kms entre las colonias de la ciudad
-    // vector<vector<int> > graph(n, vector<int>(n));
+    for (int city = 0; city < c1.nCities; city++) {
+        dijkstra(c1.nCities, c1.distBtwnClnies, city);
+        cout << endl;
+    }
 
-    // // Capacidades máximas de flujo de datos entre colonia i y colonia j
-    // vector<vector<int> > capacity(n, vector<int>(n));
-
-
-    // // Pares ordenados que representan la ubicación en un plano de las centrales
-    // vector<Colony> centralLocations;
-
-    // // Par ordenado que representa la ubicación en un plano de la nueva central
-    // Colony newCentral(0, 0);
-    // cin >> newCentral.x >> newCentral.y;
-
-    // string input1Content = readFromFile("input01.txt");
-    // string input2Content = readFromFile("input02.txt");
-    // string input3Content = readFromFile("input03.txt");
-
-    // cout << "Archivo de entrada 1" << endl;
-    // cout << input1Content << endl;
-    // cout << " " << endl;
-
-    // cout << "Archivo de entrada 2" << endl;
-    // cout << input2Content << endl;
-    // cout << " " << endl;
-
-    // cout << "Archivo de entrada 3" << endl;
-    // cout << input3Content << endl;
-    // cout << " " << endl;
-
-    // cout << "         Punto 01           " << endl;
-    // cout << " " << endl;
-
-    // // cout << "mcode1: " << endl;
-    // // searchMaliciousCode(transmission1Content, mcode1Content, "transmission01.txt");
-    // // cout << " " << endl;
-
-    // // cout << "mcode2: " << endl;
-    // // searchMaliciousCode(transmission1Content, mcode2Content, "transmission01.txt");
-    // // cout << " " << endl;
-
-    // // cout << "mcode3: " << endl;
-    // // searchMaliciousCode(transmission1Content, mcode3Content, "transmission01.txt");
-    // // cout << " " << endl;
-
-    // cout << "         Punto 02           " << endl;
-    // cout << " " << endl;
-
-    // // cout << "mcode1: " << endl;
-    // // searchMaliciousCode(transmission2Content, mcode1Content, "transmission02.txt");
-    // // cout << " " << endl;
-
-    // // cout << "mcode2: " << endl;
-    // // searchMaliciousCode(transmission2Content, mcode2Content, "transmission02.txt");
-    // // cout << " " << endl;
-
-    // // cout << "mcode3: " << endl;
-    // // searchMaliciousCode(transmission2Content, mcode3Content, "transmission02.txt");
-    // // cout << " " << endl;
-
-    // cout << "         Punto 03           " << endl;
-    // cout << " " << endl;
-
-    // cout << "         Punto 04           " << endl;
-    // cout << " " << endl;
-    
-    // return 0;
+    return 0;
 }
