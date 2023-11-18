@@ -363,6 +363,44 @@ int fordFulkerson(int n, const vector<vector<int>> &fluxMatrix, int s, int t) {
 }
 
 // ==========================================================================================
+// Función findNearestCentral, encuentra la central más cercana a una colonia
+//
+// @params newCentral: Par ordenado que representa la ubicación en un plano de la nueva
+// central
+// @params centralLocations: Pares ordenados que representan la ubicación en un plano de las
+// centrales
+//
+// @return: Índice de la central más cercana a la colonia utilizando la distancia euclidiana
+//
+// @complexity
+// ==========================================================================================
+
+double distanceBetweenColonies(const pair<int, int> &colony1, pair<int, int> &colony2) {
+    return sqrt(pow(colony1.first - colony2.first, 2) + pow(colony1.second - colony2.second, 2));
+}
+
+int findNearestCentral(pair<int, int> &newCentral, vector<pair<int, int>> &centralLocations) {
+    int nearestCentral = -1;
+    pair<int, int> nearestCentralCoords;
+    double minDistance = INT_MAX;
+
+    for (int i = 0; i < centralLocations.size(); i++) {
+        double distance = distanceBetweenColonies(newCentral, centralLocations[i]);
+        if (distance < minDistance)
+        {
+            minDistance = distance;
+            nearestCentral = i;
+            nearestCentralCoords = centralLocations[i];
+        }
+    }
+
+    printf("La central más cercana a [%d,%d] es [%d,%d] con una distancia de %.3f.\n", newCentral.first, newCentral.second, nearestCentralCoords.first, nearestCentralCoords.second, minDistance);
+    cout << endl;
+    
+    return nearestCentral;
+}
+
+// ==========================================================================================
 // Función main, función principal del programa
 //
 // @params argc: Número de argumentos
@@ -374,22 +412,22 @@ int fordFulkerson(int n, const vector<vector<int>> &fluxMatrix, int s, int t) {
 
 int main(int argc, char *argv[]) {
 
-    City c1 = readFromFile("input03.txt");
+    City c1 = readFromFile("input01.txt");
 
     cout << "\nPunto 01\n" << endl;
-
     for (int city = 0; city < c1.nCities; city++) {
         dijkstra(c1.nCities, c1.distBtwnClnies, city);
         cout << endl;
     }
 
     cout << "\nPunto 02\n" << endl;
-
     smp(c1.nCities, c1.distBtwnClnies);
 
     cout << "\nPunto 03\n" << endl;
+    cout << "Flujo máximo: " << fordFulkerson(c1.nCities, c1.maxFluxBtwnClnies, 0, c1.nCities-1) << endl;
 
-    cout << "Flujo máximo: " << fordFulkerson(c1.nCities, c1.maxFluxBtwnClnies, 0, c1.nCities-1) << " \n" << endl;
+    cout << "\nPunto 04\n" << endl;
+    findNearestCentral(c1.coordsNewClny, c1.coordsClnies);
 
     return 0;
 }
