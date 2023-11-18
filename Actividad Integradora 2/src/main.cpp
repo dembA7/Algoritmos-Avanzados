@@ -25,7 +25,6 @@
 
 using namespace std;
 
-
 // ==========================================================================================
 // Estructura City, almacena los datos de una ciudad
 //
@@ -282,6 +281,86 @@ int smp(int numCities, const vector<vector<int>> &distanceMatrix) {
     return totalDistance;
 }
 
+// ==========================================================================================
+// Función bfs, encuentra el camino más corto entre dos nodos de un grafo
+//
+// @params n: Número de colonias en la ciudad
+// @params rfluxMatrix: Flujo residual entre las colonias de la ciudad
+// @params s: Colonia de origen
+// @params t: Colonia de destino
+// @params parent: Arreglo que almacena el camino más corto
+//
+// @return: Regresa true si existe un camino entre el nodo de origen y el nodo de destino
+// @complexity O(n)
+// ==========================================================================================
+
+bool bfs(int n, const vector<vector<int>> &rfluxMatrix, int s, int t, int parent[]) {
+
+    vector<bool> visited(n, false);
+
+    queue<int> q;
+    q.push(s);
+    visited[s] = true;
+    parent[s] = -1;
+
+    while (!q.empty()) {
+        int u = q.front();
+        q.pop();
+
+        for (int v = 0; v < n; v++) {
+            if (visited[v] == false && rfluxMatrix[u][v] > 0) {
+                q.push(v);
+                parent[v] = u;
+                visited[v] = true;
+            }
+        }
+    }
+
+    return (visited[t] == true);
+}
+
+// ==========================================================================================
+// Función fordFulkerson, implementación del algoritmo de Ford-Fulkerson para encontrar el
+// flujo máximo entre dos nodos de un grafo
+//
+// @params n: Número de colonias en la ciudad
+// @params fluxMatrix: Flujo entre las colonias de la ciudad
+// @params s: Colonia de origen
+// @params t: Colonia de destino
+//
+// @return: Regresa el flujo máximo entre el nodo de origen y el nodo de destino
+// @complexity O(n)
+// ==========================================================================================
+
+int fordFulkerson(int n, const vector<vector<int>> &fluxMatrix, int s, int t) {
+    int u, v;
+
+    vector<vector<int>> rfluxMatrix(n, vector<int>(n, 0));
+    for (u = 0; u < n; u++)
+        for (v = 0; v < n; v++)
+            rfluxMatrix[u][v] = fluxMatrix[u][v];
+
+    int parent[n];
+    int max_flow = 0;
+
+    while (bfs(n, rfluxMatrix, s, t, parent)) {
+        int path_flow = INT_MAX;
+        for (v = t; v != s; v = parent[v]) {
+            u = parent[v];
+            path_flow = min(path_flow, rfluxMatrix[u][v]);
+        }
+
+        for (v = t; v != s; v = parent[v]) {
+            u = parent[v];
+            rfluxMatrix[u][v] -= path_flow;
+            rfluxMatrix[v][u] += path_flow;
+        }
+
+        max_flow += path_flow;
+    }
+
+    return max_flow;
+}
 
 // ==========================================================================================
 // Función main, función principal del programa
@@ -295,7 +374,7 @@ int smp(int numCities, const vector<vector<int>> &distanceMatrix) {
 
 int main(int argc, char *argv[]) {
 
-    City c1 = readFromFile("input02.txt");
+    City c1 = readFromFile("input03.txt");
 
     cout << "\nPunto 01\n" << endl;
 
@@ -306,7 +385,11 @@ int main(int argc, char *argv[]) {
 
     cout << "\nPunto 02\n" << endl;
 
-    int optimalDistance = smp(c1.nCities, c1.distBtwnClnies);
+    smp(c1.nCities, c1.distBtwnClnies);
+
+    cout << "\nPunto 03\n" << endl;
+
+    cout << "Flujo máximo: " << fordFulkerson(c1.nCities, c1.maxFluxBtwnClnies, 0, c1.nCities-1) << " \n" << endl;
 
     return 0;
 }
