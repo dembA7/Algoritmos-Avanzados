@@ -22,6 +22,7 @@
 
 using namespace std;
 
+const int INF = numeric_limits<int>::max();
 struct Colony {
     int x;
     int y;
@@ -86,6 +87,48 @@ bool readFromFile(const string& filename, int& n, vector<vector<int> >& graph, v
 
 
 // ==========================================================================================
+// Función dijkstra, implementación del algoritmo de Dijkstra para encontrar la forma óptima
+// de cablear las colonias de la ciudad
+// 
+// @params graph: Distancias en kms entre las colonias de la ciudad
+// @params start: Nodo inicial del grafo
+//
+// @return: Lista de arcos que representan la forma óptima de cablear las colonias de la 
+//          ciudad
+//
+// @complexity 
+// ==========================================================================================
+
+vector<pair<int, int> > dijkstra(const vector<vector<int> >& graph, int start){
+    int n = graph.size();
+    vector<int> distance(n, INF);
+    vector<bool> visited(n, false);
+    vector<pair<int, int> > result; 
+
+    priority_queue<pair<int, int>, vector<pair<int, int> >, greater<pair<int, int> > > pq;
+
+    distance[start] = 0;
+    pq.push({0, start});
+
+    while(!pq.empty()){
+        int u = pq.top().second;
+        pq.pop();
+
+        if(visited[u]) continue;
+        visited[u] = true;
+
+        for(int v = 0; v < n; v++){
+            if(!visited[v] && graph[u][v] < distance[v]){
+                distance[v] = graph[u][v];
+                pq.push({distance[v], v});
+                result.push_back({u, v});
+            }
+        }
+    }
+    return result;
+} 
+
+// ==========================================================================================
 // Función readFromFile, lee el contenido de un archivo y lo devuelve como una cadena de 
 // caracteres
 // 
@@ -95,19 +138,40 @@ bool readFromFile(const string& filename, int& n, vector<vector<int> >& graph, v
 // @complexity O(n)
 // ==========================================================================================
 
+vector<int> salesmanProblem(const vector<vector<int> >& graph, int start){
+    int n = graph.size();
+    vector<int> path;
+    vector<int> vertices(n);
 
+    for(int i = 0; i < n; i++){
+        if(i != start) {
+            vertices[i] = i;
+        }
+    }
 
-// ==========================================================================================
-// Función readFromFile, lee el contenido de un archivo y lo devuelve como una cadena de 
-// caracteres
-// 
-// @params filename: Archivo que se desea leer
-//
-// @return: Regresa el contenido del archivo como una cadena de caracteres
-// @complexity O(n)
-// ==========================================================================================
+    int minPath = INF;
+    do {
+        int currentPath = 0;
+        int k = start;
 
+        for(int i = 0; i < n - 1; i++){
+            currentPath += graph[k][vertices[i]];
+            k = vertices[i];
+        }
+        
+        currentPath += graph[k][start];
 
+        if(currentPath < minPath){
+            minPath = currentPath;
+            path = vertices;
+        }
+    } while(next_permutation(vertices.begin(), vertices.end()));
+
+    path.push_back(start);
+    path.insert(path.begin(), start);
+
+    return path;
+}
 
 // ==========================================================================================
 // Función readFromFile, lee el contenido de un archivo y lo devuelve como una cadena de 
