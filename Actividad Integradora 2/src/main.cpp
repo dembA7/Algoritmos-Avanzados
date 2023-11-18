@@ -61,9 +61,9 @@ bool readFromFile(const string &filename)
     int n;
     inputFile >> n;
 
-    vector<vector<int>> distBtwnClnies(n, vector<int>(n, 0));
-    vector<vector<int>> maxFluxBtwnClnies(n, vector<int>(n, 0));
-    vector<pair<int, int>> coordsClnies(n, pair<int, int>(0, 0));
+    vector<vector<int> > distBtwnClnies(n, vector<int>(n, 0));
+    vector<vector<int> > maxFluxBtwnClnies(n, vector<int>(n, 0));
+    vector<pair<int, int> > coordsClnies(n, pair<int, int>(0, 0));
     pair<int, int> coordsNewClny(0, 0);
 
     for (int i = 0; i < n; ++i)
@@ -102,6 +102,7 @@ bool readFromFile(const string &filename)
             coordsNewClny = pair<int, int>(x, y);
         }
     }
+    return true;
 }
 
 // ==========================================================================================
