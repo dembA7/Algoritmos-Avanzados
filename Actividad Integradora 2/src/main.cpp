@@ -21,18 +21,19 @@
 #include <vector>
 #include <queue>
 #include <climits>
+#include <bits/stdc++.h>
 
 using namespace std;
 
+
 // ==========================================================================================
-// Struct City, contiene los atributos necesarios para representar una ciudad
+// Estructura City, almacena los datos de una ciudad
 //
 // @params nCities: Número de colonias en la ciudad
 // @params distBtwnClnies: Distancias en kms entre las colonias de la ciudad
-// @params maxFluxBtwnClnies: Capacidades máximas de flujo de datos entre colonia i y colonia j
-// @params coordsClnies: Pares ordenados que representan la ubicación en un plano de las
-//                       centrales
-// @params coordsNewClny: Par ordenado que representa la ubicación en un plano de la nueva central
+// @params maxFluxBtwnClnies: Flujo máximo entre las colonias de la ciudad
+// @params coordsClnies: Coordenadas de las colonias de la ciudad
+// @params coordsNewClny: Coordenadas de la nueva colonia
 // ==========================================================================================
 
 struct City {
@@ -80,12 +81,12 @@ struct City {
 
 
 // ==========================================================================================
-// Función readFromFile, lee el contenido de un archivo y lo devuelve como una cadena de
-// caracteres
+// Función readFromFile, lee los datos de un archivo de texto y los almacena en una estructura
+// de datos
 //
-// @params filename: Nombre del archivo a leer
+// @params filename: Nombre del archivo de texto
 //
-// @return: Regresa el contenido del archivo como una cadena de caracteres
+// @return: Regresa una estructura de datos con los datos de la ciudad
 // @complexity O(n)
 // ==========================================================================================
 
@@ -134,13 +135,13 @@ City readFromFile(const string &filename) {
 
 
 // ==========================================================================================
-// Función minDistance, encuentra la distancia mínima entre dos colonias
+// Función minDistance, encuentra la distancia mínima entre una colonia y todas las demás
 //
 // @params n: Número de colonias en la ciudad
 // @params dist: Distancias en kms entre las colonias de la ciudad
 // @params sptSet: Arreglo de booleanos que indica si una colonia ya fue visitada
 //
-// @return: Regresa el índice de la colonia con la distancia mínima
+// @return: Regresa el índice de la colonia más cercana
 // @complexity O(n)
 // ==========================================================================================
 
@@ -159,16 +160,17 @@ int minDistance(int n, const vector<int> &dist, const vector<bool> &sptSet) {
 
 
 // ==========================================================================================
-// Función printSolution, imprime la solución del problema
+// Función printSolutionDijkstra, imprime la distancia mínima entre una colonia y todas las
+// demás
 //
-// @params city: Ciudad a la que se le aplicó el algoritmo
+// @params city: Colonia a la que se le aplicó el algoritmo
 // @params n: Número de colonias en la ciudad
 // @params dist: Distancias en kms entre las colonias de la ciudad
 //
 // @complexity O(n)
 // ==========================================================================================
 
-void printSolution(int city, int n, const vector<int> &dist) {
+void printSolutionDijkstra(int city, int n, const vector<int> &dist) {
     for (int i = 0; i < n; i++) {
         if (i != city) {
             cout << "Colonia " << city + 1 << " a colonia " << i + 1 << ": " <<  dist[i] << endl;
@@ -207,7 +209,77 @@ void dijkstra(int n, const vector<vector<int>> &graph, int city) {
         }
     }
 
-    printSolution(city, n, dist);
+    printSolutionDijkstra(city, n, dist);
+}
+
+
+// ==========================================================================================
+// Función findNearestCity, encuentra la colonia más cercana a una colonia dada
+//
+// @params numCities: Número de colonias en la ciudad
+// @params distanceMatrix: Distancias en kms entre las colonias de la ciudad
+// @params city: Colonia a la que se le aplicará el algoritmo
+// @params visited: Arreglo de booleanos que indica si una colonia ya fue visitada
+//
+// @return: Regresa el índice de la colonia más cercana
+// @complexity O(n)
+// ==========================================================================================
+
+int findNearestCity(int numCities, const vector<vector<int>> &distanceMatrix, int city, vector<bool> &visited) {
+    int minDistance = INT_MAX;
+    int nearestCity = -1;
+
+    for (int i = 0; i < numCities; ++i) {
+        if (!visited[i] && distanceMatrix[city][i] < minDistance) {
+            minDistance = distanceMatrix[city][i];
+            nearestCity = i;
+        }
+    }
+
+    return nearestCity;
+}
+
+// ==========================================================================================
+// Función smp, implementación del algoritmo de Dijkstra para encontrar la distancia
+// mínima entre una colonia y todas las demás
+//
+// @params numCities: Número de colonias en la ciudad
+// @params distanceMatrix: Distancias en kms entre las colonias de la ciudad
+//
+// @return: Regresa el costo total del recorrido
+// @complexity O(n)
+// ==========================================================================================
+
+int smp(int numCities, const vector<vector<int>> &distanceMatrix) {
+    vector<bool> visited(numCities, false);
+    vector<int> path;
+    int totalDistance = 0;
+
+    int currentCity = 0;
+    path.push_back(currentCity + 1);
+    visited[currentCity] = true;
+
+    for (int i = 0; i < numCities; ++i) {
+        int nearestCity = findNearestCity(numCities, distanceMatrix, currentCity, visited);
+        if (nearestCity != -1) {
+            path.push_back(nearestCity + 1);
+            visited[nearestCity] = true;
+            totalDistance += distanceMatrix[currentCity][nearestCity];
+            currentCity = nearestCity;
+        }
+    }
+    path.push_back(path[0]);
+    totalDistance += distanceMatrix[currentCity][path[0] - 1];
+
+    cout << "El recorrido:" << endl;
+    for (size_t i = 0; i < path.size() - 1; ++i) {
+        cout << path[i] << " -> ";
+    }
+    cout << path.back() << endl;
+
+    cout << "El costo: " << totalDistance << endl;
+
+    return totalDistance;
 }
 
 
@@ -223,13 +295,18 @@ void dijkstra(int n, const vector<vector<int>> &graph, int city) {
 
 int main(int argc, char *argv[]) {
 
+    City c1 = readFromFile("input02.txt");
+
     cout << "\nPunto 01\n" << endl;
-    City c1 = readFromFile("input01.txt");
 
     for (int city = 0; city < c1.nCities; city++) {
         dijkstra(c1.nCities, c1.distBtwnClnies, city);
         cout << endl;
     }
+
+    cout << "\nPunto 02\n" << endl;
+
+    int optimalDistance = smp(c1.nCities, c1.distBtwnClnies);
 
     return 0;
 }
