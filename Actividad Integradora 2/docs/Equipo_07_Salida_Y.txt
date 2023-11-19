@@ -1,0 +1,153 @@
+O U T P U T  1:
+
+Punto 01
+
+Colonia 1 a colonia 2: 16
+Colonia 1 a colonia 3: 34
+Colonia 1 a colonia 4: 32
+
+Colonia 2 a colonia 1: 16
+Colonia 2 a colonia 3: 18
+Colonia 2 a colonia 4: 21
+
+Colonia 3 a colonia 1: 34
+Colonia 3 a colonia 2: 18
+Colonia 3 a colonia 4: 7
+
+Colonia 4 a colonia 1: 32
+Colonia 4 a colonia 2: 21
+Colonia 4 a colonia 3: 7
+
+
+Punto 02
+
+El recorrido:
+1 -> 2 -> 3 -> 4 -> 1
+El costo: 73
+
+Punto 03
+
+Flujo maximo: 78
+
+Punto 04
+
+La central mas cercana a [325,200] es [300,100] con una distancia de 103.078
+
+
+
+
+
+O U T P U T  2:
+
+Punto 01
+
+Colonia 1 a colonia 2: 2
+Colonia 1 a colonia 3: 3
+Colonia 1 a colonia 4: 7
+Colonia 1 a colonia 5: 3
+Colonia 1 a colonia 6: 5
+
+Colonia 2 a colonia 1: 2
+Colonia 2 a colonia 3: 3
+Colonia 2 a colonia 4: 5
+Colonia 2 a colonia 5: 1
+Colonia 2 a colonia 6: 4
+
+Colonia 3 a colonia 1: 1
+Colonia 3 a colonia 2: 2
+Colonia 3 a colonia 4: 4
+Colonia 3 a colonia 5: 3
+Colonia 3 a colonia 6: 5
+
+Colonia 4 a colonia 1: 2
+Colonia 4 a colonia 2: 2
+Colonia 4 a colonia 3: 2
+Colonia 4 a colonia 5: 2
+Colonia 4 a colonia 6: 1
+
+Colonia 5 a colonia 1: 1
+Colonia 5 a colonia 2: 2
+Colonia 5 a colonia 3: 3
+Colonia 5 a colonia 4: 4
+Colonia 5 a colonia 6: 5
+
+Colonia 6 a colonia 1: 2
+Colonia 6 a colonia 2: 3
+Colonia 6 a colonia 3: 1
+Colonia 6 a colonia 4: 3
+Colonia 6 a colonia 5: 1
+
+
+Punto 02
+
+El recorrido:
+1 -> 2 -> 5 -> 3 -> 4 -> 6 -> 1
+El costo: 16
+
+Punto 03
+
+Flujo maximo: 19
+
+Punto 04
+
+La central mas cercana a [700,400] es [690,420] con una distancia de 22.361.
+
+
+
+
+
+O U T P U T  3:
+
+
+Punto 01
+
+Colonia 1 a colonia 2: 34      
+Colonia 1 a colonia 3: 53      
+Colonia 1 a colonia 4: 21      
+Colonia 1 a colonia 5: 55      
+Colonia 1 a colonia 6: 21      
+
+Colonia 2 a colonia 1: 42      
+Colonia 2 a colonia 3: 56      
+Colonia 2 a colonia 4: 24      
+Colonia 2 a colonia 5: 21      
+Colonia 2 a colonia 6: 1       
+
+Colonia 3 a colonia 1: 1       
+Colonia 3 a colonia 2: 23      
+Colonia 3 a colonia 4: 22      
+Colonia 3 a colonia 5: 21      
+Colonia 3 a colonia 6: 22      
+
+Colonia 4 a colonia 1: 32      
+Colonia 4 a colonia 2: 46      
+Colonia 4 a colonia 3: 32      
+Colonia 4 a colonia 5: 53      
+Colonia 4 a colonia 6: 21      
+
+Colonia 5 a colonia 1: 53      
+Colonia 5 a colonia 2: 34      
+Colonia 5 a colonia 3: 53      
+Colonia 5 a colonia 4: 21      
+Colonia 5 a colonia 6: 35      
+
+Colonia 6 a colonia 1: 55      
+Colonia 6 a colonia 2: 69      
+Colonia 6 a colonia 3: 55      
+Colonia 6 a colonia 4: 23      
+Colonia 6 a colonia 5: 45      
+
+
+Punto 02
+
+El recorrido:
+1 -> 4 -> 6 -> 5 -> 2 -> 3 -> 1
+El costo: 191
+
+Punto 03
+
+Flujo maximo: 5
+
+Punto 04
+
+La central mas cercana a [392,893] es [234,576] con una distancia de 354.193.
