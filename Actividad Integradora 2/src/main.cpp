@@ -7,10 +7,10 @@
 //          Ian Padrón Corona  - A01708940
 //
 // Description: Programa que permite encontrar la distancia mínima entre una colonia y todas
-//              las demás en una ciudad, así como la distancia mínima entre dos colonias
+//              las demas en una ciudad, así como la distancia mínima entre dos colonias
 //              cualesquiera. El programa lee los datos de un archivo de texto y los almacena
 //              en una estructura de datos. Posteriormente, se aplica el algoritmo de Dijkstra
-//              para encontrar la distancia mínima entre una colonia y todas las demás.
+//              para encontrar la distancia mínima entre una colonia y todas las demas.
 //              Finalmente, se imprimen los resultados en la consola.
 //
 // ==========================================================================================
@@ -30,7 +30,7 @@ using namespace std;
 //
 // @params nCities: Número de colonias en la ciudad
 // @params distBtwnClnies: Distancias en kms entre las colonias de la ciudad
-// @params maxFluxBtwnClnies: Flujo máximo entre las colonias de la ciudad
+// @params maxFluxBtwnClnies: Flujo maximo entre las colonias de la ciudad
 // @params coordsClnies: Coordenadas de las colonias de la ciudad
 // @params coordsNewClny: Coordenadas de la nueva colonia
 // ==========================================================================================
@@ -134,13 +134,13 @@ City readFromFile(const string &filename) {
 
 
 // ==========================================================================================
-// Función minDistance, encuentra la distancia mínima entre una colonia y todas las demás
+// Función minDistance, encuentra la distancia mínima entre una colonia y todas las demas
 //
 // @params n: Número de colonias en la ciudad
 // @params dist: Distancias en kms entre las colonias de la ciudad
 // @params sptSet: Arreglo de booleanos que indica si una colonia ya fue visitada
 //
-// @return: Regresa el índice de la colonia más cercana
+// @return: Regresa el índice de la colonia mas cercana
 // @complexity O(n)
 // ==========================================================================================
 
@@ -160,7 +160,7 @@ int minDistance(int n, const vector<int> &dist, const vector<bool> &sptSet) {
 
 // ==========================================================================================
 // Función printSolutionDijkstra, imprime la distancia mínima entre una colonia y todas las
-// demás
+// demas
 //
 // @params city: Colonia a la que se le aplicó el algoritmo
 // @params n: Número de colonias en la ciudad
@@ -180,11 +180,11 @@ void printSolutionDijkstra(int city, int n, const vector<int> &dist) {
 
 // ==========================================================================================
 // Función dijkstra, implementación del algoritmo de Dijkstra para encontrar la distancia
-// mínima entre una colonia y todas las demás
+// mínima entre una colonia y todas las demas
 //
 // @params n: Número de colonias en la ciudad
 // @params graph: Distancias en kms entre las colonias de la ciudad
-// @params city: Colonia a la que se le aplicará el algoritmo
+// @params city: Colonia a la que se le aplicara el algoritmo
 //
 // @complexity O(n)
 // ==========================================================================================
@@ -213,14 +213,14 @@ void dijkstra(int n, const vector<vector<int>> &graph, int city) {
 
 
 // ==========================================================================================
-// Función findNearestCity, encuentra la colonia más cercana a una colonia dada
+// Función findNearestCity, encuentra la colonia mas cercana a una colonia dada
 //
 // @params numCities: Número de colonias en la ciudad
 // @params distanceMatrix: Distancias en kms entre las colonias de la ciudad
-// @params city: Colonia a la que se le aplicará el algoritmo
+// @params city: Colonia a la que se le aplicara el algoritmo
 // @params visited: Arreglo de booleanos que indica si una colonia ya fue visitada
 //
-// @return: Regresa el índice de la colonia más cercana
+// @return: Regresa el índice de la colonia mas cercana
 // @complexity O(n)
 // ==========================================================================================
 
@@ -239,8 +239,8 @@ int findNearestCity(int numCities, const vector<vector<int>> &distanceMatrix, in
 }
 
 // ==========================================================================================
-// Función smp, implementación del algoritmo de Dijkstra para encontrar la distancia
-// mínima entre una colonia y todas las demás
+// Función smp, implementación del algoritmo de la colonia mas cercana para encontrar el
+// recorrido mas corto que pase por todas las colonias de una ciudad
 //
 // @params numCities: Número de colonias en la ciudad
 // @params distanceMatrix: Distancias en kms entre las colonias de la ciudad
@@ -282,13 +282,13 @@ int smp(int numCities, const vector<vector<int>> &distanceMatrix) {
 }
 
 // ==========================================================================================
-// Función bfs, encuentra el camino más corto entre dos nodos de un grafo
+// Función bfs, encuentra el camino mas corto entre dos nodos de un grafo
 //
 // @params n: Número de colonias en la ciudad
 // @params rfluxMatrix: Flujo residual entre las colonias de la ciudad
 // @params s: Colonia de origen
 // @params t: Colonia de destino
-// @params parent: Arreglo que almacena el camino más corto
+// @params parent: Arreglo que almacena el camino mas corto
 //
 // @return: Regresa true si existe un camino entre el nodo de origen y el nodo de destino
 // @complexity O(n)
@@ -321,14 +321,14 @@ bool bfs(int n, const vector<vector<int>> &rfluxMatrix, int s, int t, int parent
 
 // ==========================================================================================
 // Función fordFulkerson, implementación del algoritmo de Ford-Fulkerson para encontrar el
-// flujo máximo entre dos nodos de un grafo
+// flujo maximo entre dos nodos de un grafo
 //
 // @params n: Número de colonias en la ciudad
 // @params fluxMatrix: Flujo entre las colonias de la ciudad
 // @params s: Colonia de origen
 // @params t: Colonia de destino
 //
-// @return: Regresa el flujo máximo entre el nodo de origen y el nodo de destino
+// @return: Regresa el flujo maximo entre el nodo de origen y el nodo de destino
 // @complexity O(n)
 // ==========================================================================================
 
@@ -377,14 +377,14 @@ double distanceBetweenColonies(const pair<int, int> &colony1, pair<int, int> &co
 }
 
 // ==========================================================================================
-// Función findNearestCentral, encuentra la central más cercana a una colonia
+// Función findNearestCentral, encuentra la central mas cercana a una colonia
 //
 // @params newCentral: Par ordenado que representa la ubicación en un plano de la nueva
 // central
 // @params centralLocations: Pares ordenados que representan la ubicación en un plano de las
 // centrales
 //
-// @return: Índice de la central más cercana a la colonia utilizando la distancia euclidiana
+// @return: Índice de la central mas cercana a la colonia utilizando la distancia euclidiana
 //
 // @complexity
 // ==========================================================================================
@@ -404,7 +404,7 @@ int findNearestCentral(pair<int, int> &newCentral, vector<pair<int, int>> &centr
         }
     }
 
-    printf("La central más cercana a [%d,%d] es [%d,%d] con una distancia de %.3f.\n", newCentral.first, newCentral.second, nearestCentralCoords.first, nearestCentralCoords.second, minDistance);
+    printf("La central mas cercana a [%d,%d] es [%d,%d] con una distancia de %.3f.\n", newCentral.first, newCentral.second, nearestCentralCoords.first, nearestCentralCoords.second, minDistance);
     cout << endl;
     
     return nearestCentral;
@@ -422,7 +422,7 @@ int findNearestCentral(pair<int, int> &newCentral, vector<pair<int, int>> &centr
 
 int main(int argc, char *argv[]) {
 
-    City c1 = readFromFile("input01.txt");
+    City c1 = readFromFile("input03.txt");
 
     cout << "\nPunto 01\n" << endl;
     for (int city = 0; city < c1.nCities; city++) {
@@ -434,7 +434,7 @@ int main(int argc, char *argv[]) {
     smp(c1.nCities, c1.distBtwnClnies);
 
     cout << "\nPunto 03\n" << endl;
-    cout << "Flujo máximo: " << fordFulkerson(c1.nCities, c1.maxFluxBtwnClnies, 0, c1.nCities-1) << endl;
+    cout << "Flujo maximo: " << fordFulkerson(c1.nCities, c1.maxFluxBtwnClnies, 0, c1.nCities-1) << endl;
 
     cout << "\nPunto 04\n" << endl;
     findNearestCentral(c1.coordsNewClny, c1.coordsClnies);
