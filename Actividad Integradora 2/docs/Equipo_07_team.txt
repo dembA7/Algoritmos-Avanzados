@@ -1,0 +1,16 @@
+Arturo Díaz López  - A01709522: 
+	Implementación de la funcionaldiad "findNearestCity"
+	Implementación de la funcionaldiad "salesmanProblem"
+	Implementación de la funcionaldiad "bfs"
+
+Diego Vega Camacho - A01704492: 
+	Implementación de la funcionaldiad "bfs"
+	Implementación de la funcionaldiad "distanceBetweenColonies"
+	Implementación de la funcionaldiad "findNearestCentral"
+
+Ian Padrón Corona  - A01708940: 
+	Implementación de la estructura City
+	Implementación de la funcionaldiad "Lectura de archivo"
+	Implementación de la funcionaldiad "Dijkstra"
+	Implementación de la funcionaldiad "bfs"
+	Implementación de la funcionaldiad "fordFulkerson"
